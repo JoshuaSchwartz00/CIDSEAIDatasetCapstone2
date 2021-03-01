@@ -10,6 +10,7 @@ from PIL import ImageGrab
 from vpython import *
 from random import shuffle, randint
 
+list_scenes = list()
 
 # Press the green button in the gutter to run the script.
 class objects:
@@ -18,7 +19,8 @@ class objects:
     shape = ""
     location = (0, 0, 0)
 
-    def __init__(self, size, colors, shape, location):
+    def __init__(self, size, colors, shape, location): 
+        #objects can be: small or large, red or green, large or small
         self.size = size
         self.color = colors
         self.shape = shape
@@ -30,8 +32,15 @@ class objects:
 class scene:
     image_location = ""  # filename
     list_objects = list()
-    list_expressions = dict()  # {c1.size} objects" : ["<size> object template"]
+    objects_tuples = list()
+    #tuple/list = (ref expr, template, (1,3 if it applies to objects 1 and 3))
+    list_expressions = list() #(index, color, shape, size)
+    
+    #old
+    # {c1.size} objects" : ["<size> object template"]
     # {'small objects': '<size> object template', 'red objects': '<col> object template', 'cubes': '<shape> template', 'red cubes': '<col> <shape> template', 'small red objects': '<size> <col> object template', 'small cubes': '<size> <shape> object template', 'small red cubes': '<size> <color> <shape> template'}
+    
+    
     list_segmented_image = list()  # ((c1.size) objects, <size> object, segmented image path)
 
     def __init__(self, im_location, list_objects):
@@ -74,7 +83,6 @@ def isOverlap(object_list, obj):
 
 if __name__ == '__main__':
     # =====  Generating permutation list  =====
-    list_scenes = list()
     all_list = [["red", "green"], ["big", "small"], ["box", "sphere"],
                 [(-2, -2, 0), (-2, 0, 0), (-2, 2, 0), (0, -2, 0), (0, 0, 0), (0, 2, 0), (2, -2, 0), (2, 0, 0), (2, 2, 0)]]
     permutation_list = list(itertools.product(*all_list))
