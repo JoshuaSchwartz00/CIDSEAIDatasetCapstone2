@@ -6,6 +6,7 @@ from main import list_scenes
 
     #print(exrex.generate('This is (a (code|cake|test)|an (apple|elf|output))\.'))
     #print("\n".join(exrex.generate('This is (a (color|cake|test)|an (apple|elf|output))\.')))
+    #print("\n".join(exrex.generate('(small|large) (red|green) (cube|sphere)')))
 
 # class object: 
 #     size = ""
@@ -33,18 +34,16 @@ from main import list_scenes
 
 
 def main():
-
-    print("\n".join(exrex.generate('(small|large) (red|green) (cube|sphere)')))
     for scene in list_scenes:
         attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
             "red" : [],
             "green" : [],
             "small" : [],
-            "large" : [],
+            "big" : [],
             "sphere" : [],
-            "cube" : []
+            "box" : []
         }
-        for index, item in enumerate(scene.list_objects): #make tuple/list for each object like: (1, red, cube, small) 
+        for index, item in enumerate(scene.list_objects): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
             info = [index, item.color, item.shape, item.size]
             scene.objects_tuples.append(info)

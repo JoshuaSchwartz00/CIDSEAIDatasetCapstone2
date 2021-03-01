@@ -20,7 +20,7 @@ class objects:
     location = (0, 0, 0)
 
     def __init__(self, size, colors, shape, location): 
-        #objects can be: small or large, red or green, large or small
+        #objects can be: small or big, red or green, box or sphere
         self.size = size
         self.color = colors
         self.shape = shape
