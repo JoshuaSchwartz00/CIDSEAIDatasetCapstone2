@@ -33,6 +33,7 @@ class scene:
     image_location = ""  # filename
     list_objects = list()
     objects_tuples = list()
+    grid = () #(3,3)
     #tuple/list = (ref expr, template, (1,3 if it applies to objects 1 and 3))
     list_expressions = list() #(index, color, shape, size)
     
