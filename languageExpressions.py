@@ -7,7 +7,7 @@ from main import list_scenes
     #print(exrex.generate('This is (a (code|cake|test)|an (apple|elf|output))\.'))
     #print("\n".join(exrex.generate('This is (a (color|cake|test)|an (apple|elf|output))\.')))
     #print("\n".join(exrex.generate('(small|large) (red|green) (cube|sphere)')))
-#poop
+
 # class object: 
 #     size = ""
 #     color = ""
