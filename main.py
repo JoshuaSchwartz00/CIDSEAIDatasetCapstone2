@@ -5,6 +5,7 @@
 
 import itertools
 import time
+import os
 
 from PIL import ImageGrab
 from vpython import *
@@ -113,6 +114,10 @@ def capture_image(list_object, sence):
     global scenes_count
     time.sleep(0.15)
     im = ImageGrab.grab((8, 95, 505, 570))
+
+    path = os.getcwd() + "\\img"
+    if not os.path.isdir(path):
+        os.mkdir(path)
     filename = "img\\object{num}.jpg".format(num=scenes_count)
     scenes_count += 1
     im.save(filename)
