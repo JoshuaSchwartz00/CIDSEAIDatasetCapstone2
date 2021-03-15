@@ -109,7 +109,7 @@ def capture_image(list_object, sence):
     global scenes_count
     time.sleep(0.15)
     im = ImageGrab.grab((8, 95, 505, 570))
-    filename = "object{num}.jpg".format(num=scenes_count)
+    filename = "img\\object{num}.jpg".format(num=scenes_count)
     scenes_count += 1
     im.save(filename)
     # storing data to objects
