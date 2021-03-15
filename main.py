@@ -5,6 +5,7 @@
 
 import itertools
 import time
+import os
 
 from PIL import ImageGrab
 from vpython import *
@@ -12,6 +13,9 @@ from random import shuffle, randint
 
 list_scenes = list()
 scenes_count = 1  # to store the file number
+pixelCoorDict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
+                 (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
+                 (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
 
 # Press the green button in the gutter to run the script.
 class objects:
@@ -27,7 +31,8 @@ class objects:
         self.shape = shape
         self.location = location  # a tuple (x, y, z)
 
-        # tuple === tuple
+    def getPixCoordinate(self):
+        return pixelCoorDict[self.location]
 
 
 class scene:
@@ -109,7 +114,11 @@ def capture_image(list_object, sence):
     global scenes_count
     time.sleep(0.15)
     im = ImageGrab.grab((8, 95, 505, 570))
-    filename = "object{num}.jpg".format(num=scenes_count)
+
+    path = os.getcwd() + "\\img"
+    if not os.path.isdir(path):
+        os.mkdir(path)
+    filename = "img\\object{num}.jpg".format(num=scenes_count)
     scenes_count += 1
     im.save(filename)
     # storing data to objects
