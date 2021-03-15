@@ -12,6 +12,9 @@ from random import shuffle, randint
 
 list_scenes = list()
 scenes_count = 1  # to store the file number
+pixelCoorDict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
+                 (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
+                 (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
 
 # Press the green button in the gutter to run the script.
 class objects:
@@ -27,7 +30,8 @@ class objects:
         self.shape = shape
         self.location = location  # a tuple (x, y, z)
 
-        # tuple === tuple
+    def getPixCoordinate(self):
+        return pixelCoorDict[self.location]
 
 
 class scene:
