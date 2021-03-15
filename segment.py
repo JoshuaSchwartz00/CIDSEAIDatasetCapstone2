@@ -78,11 +78,20 @@ def segment(file_location, objects):
     return res
 
 
-def segment_images(sceneList):
-    for sc in sceneList:
-        for expression in sc.list_expressions:
+def segment_images(output_folder, sceneList):
+    
+    for idx, sc in enumerate(sceneList):
+        image_local = sc.image_location
+        ob_bank = sc.list_objects
+        for idy, expression in enumerate(sc.list_expressions):
             #TODO
+            ref_expr, template, obs = expression
+            result_img = segment(image_local, obs)
+            cv2.imwrite("{}/{}_{}.jpg".format(output_folder, idx, idy), result_img)
+
+            
             
 
 
 if __name__ == "__main__":
+    exit(1)
