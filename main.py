@@ -31,7 +31,7 @@ class objects:
         self.shape = shape
         self.location = location  # a tuple (x, y, z)
 
-    def getPixCoordinate(self):
+    def getPixCoordinaet(self):
         return pixelCoorDict[self.location]
 
 

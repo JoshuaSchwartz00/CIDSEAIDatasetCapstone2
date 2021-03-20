@@ -1,6 +1,7 @@
 #import re
 #import exrex
 import main
+import random
 from main import list_scenes
 
 
@@ -32,6 +33,75 @@ from main import list_scenes
  
 #scene.list_expressions.update(shapedict)
 
+def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
+
+    list1 = ["from left", "from right"]
+    list2 = ["leftmost", "rightmost", "mid"]
+    list3 = ["right to", "left to"]
+
+    choices = []
+    choices.append(random.choice(list1))
+    choices.append(random.choice(list2))
+    choices.append(random.choice(list3))
+
+    if choices[1] == "rightmost" or choices[1] == "leftmost":
+        duplicate = True
+        while(duplicate == True):
+
+            duplicate = False
+            ran_key = random.choice(shapedict.keys)
+
+            list_indexes = shapedict[ran_key]
+            dict_objects = dict()
+
+            for i in list_indexes:
+                for obj in scenes.object_tuples:
+                    if i in obj:
+                        dict_object[i] = obj[4]
+
+            if choices[1] == "leftmost":
+                leftmost_index = None
+        
+
+                for i in list_indexes:
+
+                    if leftmost_index == None:
+                        leftmost_index = i
+                    elif dict_object[leftmost_index][0] > dict_object[i][0]:
+                        leftmost_index = i
+                        duplicate = False
+                    elif dict_object[leftmost_index][0] == dict_object[i][0]:
+                        duplicate = True
+
+
+            else if choices[1] == "rightmost":
+                rightmost_index = None
+                duplicate = False
+
+                for i in list_indexes:
+
+                    if rightmost_index == None:
+                        rightmost_index = i
+                    elif dict_object[rightmost_index][0] < dict_object[i][0]:
+                        rightmost_index = i
+                        duplicate = False
+                    elif dict_object[rightmost_index][0] == dict_object[i][0]:
+                        duplicate = True
+
+    else:
+
+
+#generate a list of tuples for each expression: (referring expression, template, (1,3 if it applies to objects 1 and 3))
+def generate_tuples(shapedict, templatedict):
+
+    tuple_list = []
+
+    for key in shapedict:
+        tuple_list.append((key,templatedict[key], tuple(shapedict[key])))
+
+    return tuple_list
+
+#generate a dictionary of expression templates that our referring expressions use
 def generate_templates(shapedict):
 
     templatedict = {}
@@ -157,7 +227,7 @@ def generate_templates(shapedict):
     return templatedict
     
 
-
+#generate referring expressions based on the objects in attribute indexes
 def generate_expressions(attribute_indexes):
     
     shapedict = {}
@@ -331,8 +401,12 @@ def main():
         }
         for index, item in enumerate(scene.list_objects): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
-            info = [index, item.color, item.shape, item.size]
+
+
+            info = [index, item.color, item.shape, item.size, item.location]
+
             scene.objects_tuples.append(info)
+
             if item.color == "red":
                 attribute_indexes["red"].append(index)
             if item.color == "green":
@@ -345,6 +419,15 @@ def main():
                 attribute_indexes["sphere"].append(index)
             if item.shape == "cube":
                 attribute_indexes["cube"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        scene.list_expressions = expressionlist #set the attribute in the scene object
+
+
+            
                 
     
             
