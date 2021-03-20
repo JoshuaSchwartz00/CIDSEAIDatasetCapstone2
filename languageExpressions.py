@@ -91,7 +91,7 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
     else:
 
 
-
+#generate a list of tuples for each expression: (referring expression, template, (1,3 if it applies to objects 1 and 3))
 def generate_tuples(shapedict, templatedict):
 
     tuple_list = []
@@ -101,6 +101,7 @@ def generate_tuples(shapedict, templatedict):
 
     return tuple_list
 
+#generate a dictionary of expression templates that our referring expressions use
 def generate_templates(shapedict):
 
     templatedict = {}
@@ -226,7 +227,7 @@ def generate_templates(shapedict):
     return templatedict
     
 
-
+#generate referring expressions based on the objects in attribute indexes
 def generate_expressions(attribute_indexes):
     
     shapedict = {}
@@ -418,6 +419,15 @@ def main():
                 attribute_indexes["sphere"].append(index)
             if item.shape == "cube":
                 attribute_indexes["cube"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        scene.list_expressions = expressionlist #set the attribute in the scene object
+
+
+            
                 
     
             
