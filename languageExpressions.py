@@ -473,11 +473,12 @@ def generate_expressions(attribute_indexes):
 def main():
 
     list_scenes = list()
-    list_scene.append()
 
     object_1 = objects("big", "red", "box", (0,0,0))
     object_2 = objects("small", "green", "sphere", (2,0,0))
-    
+
+    list_scene.append()
+
     for scene in list_scenes:
         attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
             "red" : [],
