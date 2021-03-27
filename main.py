@@ -34,6 +34,28 @@ class objects:
     def getPixCoordinaet(self):
         return pixelCoorDict[self.location]
 
+    def transform_coordinate(self):
+        coordinate_list = list()
+
+        #for i in self.location:
+        if self.location[0] == -2:
+            coordinate_list.append(0)
+        elif self.location[0] == 0:
+            coordinate_list.append(1)
+        elif self.location[0] == 2:
+            coordinate_list.append(2)
+        
+        if self.location[1] == -2:
+            coordinate_list.append(2)
+        elif self.location[1] == 0:
+            coordinate_list.append(1)
+        elif self.location[1] == 2:
+            coordinate_list.append(0)
+
+        coordinate_list.append(0)
+
+        return tuple(coordinate_list)
+
 
 class scene:
     image_location = ""  # filename
