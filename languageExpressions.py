@@ -82,7 +82,7 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
         
         absolute(matrix, choices[1])
 
-    elif choices[1] = "mid":
+    elif choices[1] == "mid":
 
         key_choice = random_choice(attribute_indexes)
         matrix = transform(attribute_indexes[key_choice])
@@ -151,7 +151,7 @@ def absolute(targetMatrix, absoluteDirection):
         constraint = (0,1,0,grid_length)
     elif absoluteDirection == 'rightmost':
         constraint = (grid_length-1,grid_length,0,grid_length)
-    elif absoluteDirection == 'topmost'
+    elif absoluteDirection == 'topmost':
         constraint = (0,grid_length,0,1)
     elif absoluteDirection == 'bottommost':
         constraint = (0,grid_length,grid_length-1,grid_length)
@@ -317,71 +317,47 @@ def generate_expressions(attribute_indexes):
     #have to add template dictionary
     #object template
     if attribute_indexes["red"]:
-        shapedict.key = "red objects"
-        shapedict.value = attribute_indexes["red"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["red objects"] = attribute_indexes["red"]
     if attribute_indexes["green"]:
-        shapedict.key = "green objects"
-        shapedict.value = attribute_indexes["green"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["green objects"] = attribute_indexes["green"]
     if attribute_indexes["box"]:
-        shapedict.key = "cubes"
-        shapedict.value = attribute_indexes["box"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["cubes"] = attribute_indexes["box"]
     if attribute_indexes["sphere"]:
-        shapedict.key = "spheres"
-        shapedict.value = attribute_indexes["sphere"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["spheres"] = attribute_indexes["sphere"]
     if attribute_indexes["big"]:
-        shapedict.key = "big objects"
-        shapedict.value = attribute_indexes["big"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["big objects"] = attribute_indexes["big"]
     if attribute_indexes["small"]:
-        shapedict.key = "small objects"
-        shapedict.value = attribute_indexes["small"]
-        shapedict.add(shapedict.key, shapedict.value)
+        shapedict["small objects"] = attribute_indexes["small"]
 
     #color shape template
     if attribute_indexes["red"] and attribute_indexes["box"]:
-        if list(attribute_indexes["red"] & attribute_indexes["box"]):
-            shapedict.key = "red cubes"
-            shapedict.value = list(attribute_indexes["red"] & attribute_indexes["box"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["red"]) & set(attribute_indexes["box"])):
+            shapedict["red cubes"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["box"]))
 
 
     if attribute_indexes["green"] and attribute_indexes["box"]:
-        if list(attribute_indexes["green"] & attribute_indexes["box"]):
-            shapedict.key = "green cubes"
-            shapedict.value = list(attribute_indexes["green"] & attribute_indexes["box"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["green"]) & set(attribute_indexes["box"])):
+            shapedict["green cubes"] = list(set(attribute_indexes["green"]) & set(attribute_indexes["box"]))
 
     if attribute_indexes["red"] and attribute_indexes["sphere"]:
-        if list(attribute_indexes["red"] & attribute_indexes["sphere"]):
-            shapedict.key = "red spheres"
-            shapedict.value = list(attribute_indexes["red"] & attribute_indexes["sphere"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"])):
+            shapedict["red sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
     if attribute_indexes["green"] and attribute_indexes["sphere"]:
-        if list(attribute_indexes["green"] & attribute_indexes["sphere"]):
-            shapedict.key = "green spheres"
-            shapedict.value = list(attribute_indexes["green"] & attribute_indexes["sphere"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
+            shapedict["green sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
     #color size template
     if attribute_indexes["small"] and attribute_indexes["red"]:
-        if list(attribute_indexes["small"] & attribute_indexes["red"]):
-            shapedict.key = "small red objects"
-            shapedict.value = list(attribute_indexes["small"] & attribute_indexes["red"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["small"]) & set(attribute_indexes["red"])):
+            shapedict["small red objects"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]))
 
     if attribute_indexes["big"] and attribute_indexes["red"]:
-        if list(attribute_indexes["green"] & attribute_indexes["box"]):
-            shapedict.key = "big red objects"
-            shapedict.value = list(attribute_indexes["green"] & attribute_indexes["box"])
-            shapedict.add(shapedict.key, shapedict.value)
+        if list(set(attribute_indexes["big"]) & set(attribute_indexes["red"])):
+            shapedict["big red objects"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]))
 
     if attribute_indexes["small"] and attribute_indexes["green"]:
-        if list(attribute_indexes["small"] & attribute_indexes["green"]):
+        if list(set(attribute_indexes["small"]) & set(attribute_indexes["green"])):
             shapedict.key = "small green objects"
             shapedict.value = list(attribute_indexes["small"] & attribute_indexes["green"])
             shapedict.add(shapedict.key, shapedict.value)
@@ -476,10 +452,15 @@ def main():
 
     object_1 = objects("big", "red", "box", (0,0,0))
     object_2 = objects("small", "green", "sphere", (2,0,0))
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
 
-    list_scene.append()
+    scene_1 = scene("", list_object)
 
-    for scene in list_scenes:
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
         attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
             "red" : [],
             "green" : [],
@@ -489,13 +470,13 @@ def main():
             "box" : []
         }
 
-        for index, item in enumerate(scene.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
             info = [index, item.color, item.shape, item.size, item.location]
 
-            scene.objects_tuples.append(info)
+            scene_ob.objects_tuples.append(info)
 
             if item.color == "red":
                 attribute_indexes["red"].append(index)
@@ -516,17 +497,10 @@ def main():
         expressionlist = generate_tuples(shapedict, templatedict)
         scene.list_expressions = expressionlist #set the attribute in the scene object
 
-
-#          
-thisdict = {
-"" : "<col> object template",
-"" : "<shape> template",
-"" : "<col> <shape> template",
-"" : "<size> <col> object template",
-"" : "<size> <color> <shape> template",
-"" : "left to x template",
-"" : "x from left template"
-}
+        print(shapedict)
+        print(templatedict)
+        print(expressionlist)
 
 
-main()
+if __name__ == "__main__":
+    main()
