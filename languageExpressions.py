@@ -190,121 +190,71 @@ def generate_templates(shapedict):
 
     #"<col> object template"
     if shapedict["red objects"]:
-        templatedict.key = "red objects"
-        templatedict.value = "<col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["red objects"] = "<col> object template"
     if shapedict["green objects"]:
-        templatedict.key = "green objects"
-        templatedict.value = "<col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["green objects"] = "<col> object template"
 
     #"<size> object template"
     if shapedict["big objects"]:
-        templatedict.key = "big objects"
-        templatedict.value = "<size> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big objects"]= "<size> object template"
     if shapedict["small objects"]:
-        templatedict.key = "small objects"
-        templatedict.value = "<size> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small objects"] = "<size> object template"
 
     #"<shape> template"
     if shapedict["cubes"]:
-        templatedict.key = "cubes"
-        templatedict.value = "<shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["cubes"]= "<shape> template"
+
     if shapedict["spheres"]:
-        templatedict.key = "spheres"
-        templatedict.value = "<shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["spheres"] = "<shape> template"
 
     #"<col> <shape> template"
     if shapedict["red cubes"]:
-        templatedict.key = "red cubes"
-        templatedict.value = "<col> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["red cubes"] = "<col> <shape> template"
     if shapedict["green cubes"]:
-        templatedict.key = "green cubes"
-        templatedict.value = "<col> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["green cubes"]= "<col> <shape> template"
     if shapedict["red spheres"]:
-        templatedict.key = "red spheres"
-        templatedict.value = "<col> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["red spheres"] = "<col> <shape> template"
     if shapedict["green spheres"]:
-        templatedict.key = "green spheres"
-        templatedict.value = "<col> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["green spheres"] = "<col> <shape> template"
 
     #"<size> <col> object template"
     if shapedict["small red objects"]:
-        templatedict.key = "small red objects"
-        templatedict.value = "<size> <col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small red objects"] = "<size> <col> object template"
     if shapedict["big red objects"]:
-        templatedict.key = "big red objects"
-        templatedict.value = "<size> <col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big red objects"] = "<size> <col> object template"
     if shapedict["small green objects"]:
-        templatedict.key = "small green objects"
-        templatedict.value = "<size> <col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small green objects"] = "<size> <col> object template"
     if shapedict["big green objects"]:
-        templatedict.key = "big green objects"
-        templatedict.value = "<size> <col> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big green objects"] = "<size> <col> object template"
+
     
     #"<size> <shape> object template"
     if shapedict["small cubes"]:
-        templatedict.key = "small cubes"
-        templatedict.value = "<size> <shape> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small cubes"] = "<size> <shape> object template"
     if shapedict["big cubes"]:
-        templatedict.key = "big cubes"
-        templatedict.value = "<size> <shape> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big cubes"] = "<size> <shape> object template"
     if shapedict["small spheres"]:
-        templatedict.key = "small spheres"
-        templatedict.value = "<size> <shape> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small spheres"] = "<size> <shape> object template"
     if shapedict["big spheres"]:
-        templatedict.key = "big spheres"
-        templatedict.value = "<size> <shape> object template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big spheres"] = "<size> <shape> object template"
 
     #"<size> <color> <shape> template"
     if shapedict["small red cubes"]:
-        templatedict.key = "small red cubes"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small red cubes"] = "<size> <color> <shape> template"
     if shapedict["big red cubes"]:
-        templatedict.key = "big red cubes"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big red cubes"] = "<size> <color> <shape> template"
     if shapedict["small green cubes"]:
-        templatedict.key = "small green cubes"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small green cubes"] = "<size> <color> <shape> template"
     if shapedict["big green cubes"]:
-        templatedict.key = "big green cubes"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big green cubes"] = "<size> <color> <shape> template"
     if shapedict["big red spheres"]:
-        templatedict.key = "big red spheres"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big red spheres"] = "<size> <color> <shape> template"
     if shapedict["small red spheres"]:
-        templatedict.key = "small red spheres"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small red spheres"] = "<size> <color> <shape> template"
     if shapedict["big green spheres"]:
-        templatedict.key = "big green spheres"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["big green spheres"] = "<size> <color> <shape> template"
     if shapedict["small green spheres"]:
-        templatedict.key = "small green spheres"
-        templatedict.value = "<size> <color> <shape> template"
-        templatedict.add(templatedict.key, templatedict.value)
+        templatedict["small green spheres"] = "<size> <color> <shape> template"
 
     return templatedict
     

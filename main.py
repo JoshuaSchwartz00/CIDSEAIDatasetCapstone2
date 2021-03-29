@@ -19,10 +19,6 @@ pixelCoorDict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 8
 
 # Press the green button in the gutter to run the script.
 class objects:
-    size = ""
-    color = ""
-    shape = ""
-    location = (0, 0, 0)
 
     def __init__(self, size, colors, shape, location): 
         #objects can be: small or big, red or green, box or sphere
