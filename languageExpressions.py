@@ -266,7 +266,7 @@ def generate_expressions(attribute_indexes):
     
     #have to add template dictionary
     #object template
-    if attribute_indexes["red"]:
+    if "red" in attribute_indexes:
         shapedict["red objects"] = attribute_indexes["red"]
     if attribute_indexes["green"]:
         shapedict["green objects"] = attribute_indexes["green"]
