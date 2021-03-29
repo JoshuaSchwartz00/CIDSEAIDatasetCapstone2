@@ -19,10 +19,6 @@ pixelCoorDict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 8
 
 # Press the green button in the gutter to run the script.
 class objects:
-    size = ""
-    color = ""
-    shape = ""
-    location = (0, 0, 0)
 
     def __init__(self, size, colors, shape, location): 
         #objects can be: small or big, red or green, box or sphere
@@ -33,6 +29,28 @@ class objects:
 
     def getPixCoordinaet(self):
         return pixelCoorDict[self.location]
+
+    def transform_coordinate(self):
+        coordinate_list = list()
+
+        #for i in self.location:
+        if self.location[0] == -2:
+            coordinate_list.append(0)
+        elif self.location[0] == 0:
+            coordinate_list.append(1)
+        elif self.location[0] == 2:
+            coordinate_list.append(2)
+        
+        if self.location[1] == -2:
+            coordinate_list.append(2)
+        elif self.location[1] == 0:
+            coordinate_list.append(1)
+        elif self.location[1] == 2:
+            coordinate_list.append(0)
+
+        coordinate_list.append(0)
+
+        return tuple(coordinate_list)
 
 
 class scene:
