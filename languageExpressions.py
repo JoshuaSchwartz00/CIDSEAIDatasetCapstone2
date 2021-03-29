@@ -36,11 +36,14 @@ from main import scene
  
 #scene.list_expressions.update(shapedict)
 
+
 def transform(list_indexes):
     new_set = set()
 
     for i in list_indexes:
-        new_set.add((scene.list_objects[i].location[0], scene.list_objects[i].location[1]))
+        for obj in scene.objects_tuples:
+            if i == obj[0]:
+                new_set.add((obj[4][0], obj[4][1])) #info = [index, item.color, item.shape, item.size, item.location]
 
     return new_set
 
@@ -49,16 +52,16 @@ def random_choice(attribute_indexes):
     local_keys = list(attribute_indexes.keys())
     key_choice = ""
 
-    found = false
-    while found == false:
+    found = False
+    while found == False:
         key_choice = random.choices(local_keys)
 
-        if len(attribute_indexes[key_choice]) != 0:
+        if key_choice[0] in attribute_indexes:
             found = True
         else:
-            local_keys.remove(key_choice)
+            local_keys.remove(key_choice[0])
         
-    return key_choice
+    return key_choice[0]
 
 
 def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
@@ -73,6 +76,31 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
     choices.append(random.choice(list2))
     choices.append(random.choice(list3))
     key_choice = ""
+    from_relative_output = ""
+    from_absolute_output = ""
+    relative_output = ""
+    mid_output = ""
+    
+    choices[2] = "left to"
+    choices[1] = "mid"
+    choices[0] = "from left"
+
+
+    if choices[0] == "from left" or choices[0] == "from right":
+
+        target_choice = random_choice(attribute_indexes)
+        relative_choice = random_choice(attribute_indexes)
+
+        target_matrix = transform(attribute_indexes[target_choice])
+        relative_matrix = transform(attribute_indexes[relative_choice])
+
+        print(target_matrix, relative_matrix)
+        for i in range(1, 5):
+            from_relative_output = from_relative(target_matrix, relative_matrix, choices[0], i) #what is number?
+
+            if len(from_relative_output) > 0:
+                break
+        print(from_relative_output, len(from_relative_output))
 
     if choices[1] == "rightmost" or choices[1] == "leftmost" or choices[1] == "topmost" or choices[1] == "bottommost":
 
@@ -80,14 +108,17 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
 
         matrix = transform(attribute_indexes[key_choice])
         
-        absolute(matrix, choices[1])
+        from_absolute = absolute(matrix, choices[1])
 
     elif choices[1] == "mid":
 
-        key_choice = random_choice(attribute_indexes)
-        matrix = transform(attribute_indexes[key_choice])
+        target_choice = random_choice(attribute_indexes)
+        relative_choice = random_choice(attribute_indexes)
 
-        middle(matrix, choices[1])
+        target_matrix = transform(attribute_indexes[target_choice])
+        relative_matrix = transform(attribute_indexes[relative_choice])
+
+        middle(target_matrix, relative_matrix)
 
     if choices[2] == "left to" or choices[2] == "right to" or choices[2] == "top to" or choices[2] == "bottom to" or choices[2] == "top-left to" or choices[2] == "top-right to" or choices[2] == "bottom-left to" or choices[2] == "bottom-right to":
 
@@ -97,9 +128,12 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
         target_matrix = transform(attribute_indexes[target_choice])
         relative_matrix = transform(attribute_indexes[relative_choice])
 
-        relative(target_matrix, relative_matrix, choices[2])
+        relative_output = relative(target_matrix, relative_matrix, choices[2])
 
 
+    return [from_relative_output, from_absolute_output, relative_output, mid_output]
+
+    
 
 
 #matrix define as set of tuple(x-cord, y-cord)
@@ -173,6 +207,50 @@ def absolute(targetMatrix, absoluteDirection):
     else:
         return coordinate
 
+def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
+    grid_length = 3
+    outputset = set()
+
+    targetcolumns = list()
+    targetcolumns.append(list())
+    targetcolumns.append(list())
+    targetcolumns.append(list())
+
+    for coordx, coordy in targetMatrix:
+        targetcolumns.append((coordx, coordy))
+
+    relativeColumnsExist = list()
+    relativeColumnsExist.append(False)
+    relativeColumnsExist.append(False)
+    relativeColumnsExist.append(False)
+
+    for coordx, coordy in relativeMatrix:
+        relativeColumnsExist[coordx] = True
+    print(relativeColumnsExist)
+    for exist,idx in enumerate(relativeColumnsExist):
+        if exist:
+            iter_range = list()
+            if relativeDirection == 'from left':
+                iter_range = reversed(range(0, idx))
+            else:
+                iter_range = range(idx+1, grid_length)
+
+            loc_counter = number
+            targetObject = None
+            for i in iter_range:
+                loc_counter = loc_counter - len(targetcolumns[i])
+                print(loc_counter)
+                print(len(targetcolumns[i]))
+                if loc_counter == 0 and len(targetcolumns[i]) == 1:
+                    targetObject = targetcolumns[i][0]
+                    break
+                elif loc_counter < 0:
+                    break
+
+            if targetObject is not None:
+                outputset.add(targetObject)
+    print(outputset)
+    return outputset
 
 #generate a list of tuples for each expression: (referring expression, template, (1,3 if it applies to objects 1 and 3))
 def generate_tuples(shapedict, templatedict):
@@ -420,6 +498,7 @@ def main():
         templatedict = generate_templates(shapedict)
         expressionlist = generate_tuples(shapedict, templatedict)
         scene.list_expressions = expressionlist #set the attribute in the scene object
+        location_expressions = generate_location_expr(shapedict, templatedict, attribute_indexes, scene)
 
         print("SHAPEDICT: ")
         print(shapedict)
@@ -429,6 +508,11 @@ def main():
         print()
         print("EXPRESSION LIST: ")
         print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+
+        return expressionlist
 
 
 if __name__ == "__main__":
