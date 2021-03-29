@@ -421,8 +421,13 @@ def main():
         expressionlist = generate_tuples(shapedict, templatedict)
         scene.list_expressions = expressionlist #set the attribute in the scene object
 
+        print("SHAPEDICT: ")
         print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
         print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
         print(expressionlist)
 
 
