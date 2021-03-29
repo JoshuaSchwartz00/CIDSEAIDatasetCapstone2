@@ -292,11 +292,11 @@ def generate_expressions(attribute_indexes):
 
     if "red" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"])):
-            shapedict["red sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
+            shapedict["red spheres"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
     if "green" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
-            shapedict["green sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
+            shapedict["green spheres"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
     #color size template
     if "small" in attribute_indexes and "red" in attribute_indexes:
@@ -314,7 +314,7 @@ def generate_expressions(attribute_indexes):
 
     if "big" in attribute_indexes and "green" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["green"])):
-            shapedict["big green"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]))
+            shapedict["big green objects"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]))
 
     #size shape template
     if "small" in attribute_indexes and "box" in attribute_indexes:
