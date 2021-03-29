@@ -190,71 +190,71 @@ def generate_templates(shapedict):
     templatedict = {}
 
     #"<col> object template"
-    if shapedict["red objects"]:
+    if "red objects" in shapedict:
         templatedict["red objects"] = "<col> object template"
     if shapedict["green objects"]:
         templatedict["green objects"] = "<col> object template"
 
     #"<size> object template"
-    if shapedict["big objects"]:
+    if "big objects" in shapedict:
         templatedict["big objects"]= "<size> object template"
-    if shapedict["small objects"]:
+    if "small objects" in shapedict:
         templatedict["small objects"] = "<size> object template"
 
     #"<shape> template"
-    if shapedict["cubes"]:
+    if "cubes" in shapedict:
         templatedict["cubes"]= "<shape> template"
 
-    if shapedict["spheres"]:
+    if "spheres" in shapedict:
         templatedict["spheres"] = "<shape> template"
 
     #"<col> <shape> template"
-    if shapedict["red cubes"]:
+    if "red cubes" in shapedict:
         templatedict["red cubes"] = "<col> <shape> template"
     if "green cubes" in shapedict:
         templatedict["green cubes"]= "<col> <shape> template"
-    if shapedict["red spheres"]:
+    if "red spheres" in shapedict:
         templatedict["red spheres"] = "<col> <shape> template"
-    if shapedict["green spheres"]:
+    if "green spheres" in shapedict:
         templatedict["green spheres"] = "<col> <shape> template"
 
     #"<size> <col> object template"
-    if shapedict["small red objects"]:
+    if "small red objects" in shapedict:
         templatedict["small red objects"] = "<size> <col> object template"
-    if shapedict["big red objects"]:
+    if "big red objects" in shapedict:
         templatedict["big red objects"] = "<size> <col> object template"
-    if shapedict["small green objects"]:
+    if "small green objects" in shapedict:
         templatedict["small green objects"] = "<size> <col> object template"
-    if shapedict["big green objects"]:
+    if "big green objects" in shapedict:
         templatedict["big green objects"] = "<size> <col> object template"
 
     
     #"<size> <shape> object template"
-    if shapedict["small cubes"]:
+    if "small cubes" in shapedict:
         templatedict["small cubes"] = "<size> <shape> object template"
-    if shapedict["big cubes"]:
+    if "big cubes" in shapedict:
         templatedict["big cubes"] = "<size> <shape> object template"
-    if shapedict["small spheres"]:
+    if "small spheres" in shapedict:
         templatedict["small spheres"] = "<size> <shape> object template"
-    if shapedict["big spheres"]:
+    if "big spheres" in shapedict:
         templatedict["big spheres"] = "<size> <shape> object template"
 
     #"<size> <color> <shape> template"
-    if shapedict["small red cubes"]:
+    if "small red cubes" in shapedict:
         templatedict["small red cubes"] = "<size> <color> <shape> template"
-    if shapedict["big red cubes"]:
+    if "big red cubes" in shapedict:
         templatedict["big red cubes"] = "<size> <color> <shape> template"
-    if shapedict["small green cubes"]:
+    if "small green cubes" in shapedict:
         templatedict["small green cubes"] = "<size> <color> <shape> template"
-    if shapedict["big green cubes"]:
+    if "big green cubes" in shapedict:
         templatedict["big green cubes"] = "<size> <color> <shape> template"
-    if shapedict["big red spheres"]:
+    if "big red spheres" in shapedict:
         templatedict["big red spheres"] = "<size> <color> <shape> template"
-    if shapedict["small red spheres"]:
+    if "small red spheres" in shapedict:
         templatedict["small red spheres"] = "<size> <color> <shape> template"
-    if shapedict["big green spheres"]:
+    if "big green spheres" in shapedict:
         templatedict["big green spheres"] = "<size> <color> <shape> template"
-    if shapedict["small green spheres"]:
+    if "small green spheres" in shapedict:
         templatedict["small green spheres"] = "<size> <color> <shape> template"
 
     return templatedict
