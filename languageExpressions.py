@@ -101,6 +101,7 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
 
 
 
+
 #matrix define as set of tuple(x-cord, y-cord)
 
 def relative(targetMatrix, relativeMatrix, relativeDirection): #left to/right to
@@ -189,71 +190,71 @@ def generate_templates(shapedict):
     templatedict = {}
 
     #"<col> object template"
-    if "red objects" in shapedict:
+    if shapedict["red objects"]:
         templatedict["red objects"] = "<col> object template"
     if shapedict["green objects"]:
         templatedict["green objects"] = "<col> object template"
 
     #"<size> object template"
-    if "big objects" in shapedict:
+    if shapedict["big objects"]:
         templatedict["big objects"]= "<size> object template"
-    if "small objects" in shapedict:
+    if shapedict["small objects"]:
         templatedict["small objects"] = "<size> object template"
 
     #"<shape> template"
-    if "cubes" in shapedict:
+    if shapedict["cubes"]:
         templatedict["cubes"]= "<shape> template"
 
-    if "spheres" in shapedict:
+    if shapedict["spheres"]:
         templatedict["spheres"] = "<shape> template"
 
     #"<col> <shape> template"
-    if "red cubes" in shapedict:
+    if shapedict["red cubes"]:
         templatedict["red cubes"] = "<col> <shape> template"
     if "green cubes" in shapedict:
         templatedict["green cubes"]= "<col> <shape> template"
-    if "red spheres" in shapedict:
+    if shapedict["red spheres"]:
         templatedict["red spheres"] = "<col> <shape> template"
-    if "green spheres" in shapedict:
+    if shapedict["green spheres"]:
         templatedict["green spheres"] = "<col> <shape> template"
 
     #"<size> <col> object template"
-    if "small red objects" in shapedict:
+    if shapedict["small red objects"]:
         templatedict["small red objects"] = "<size> <col> object template"
-    if "big red objects" in shapedict:
+    if shapedict["big red objects"]:
         templatedict["big red objects"] = "<size> <col> object template"
-    if "small green objects" in shapedict:
+    if shapedict["small green objects"]:
         templatedict["small green objects"] = "<size> <col> object template"
-    if "big green objects" in shapedict:
+    if shapedict["big green objects"]:
         templatedict["big green objects"] = "<size> <col> object template"
 
     
     #"<size> <shape> object template"
-    if "small cubes" in shapedict:
+    if shapedict["small cubes"]:
         templatedict["small cubes"] = "<size> <shape> object template"
-    if "big cubes" in shapedict:
+    if shapedict["big cubes"]:
         templatedict["big cubes"] = "<size> <shape> object template"
-    if "small spheres" in shapedict:
+    if shapedict["small spheres"]:
         templatedict["small spheres"] = "<size> <shape> object template"
-    if "big spheres" in shapedict:
+    if shapedict["big spheres"]:
         templatedict["big spheres"] = "<size> <shape> object template"
 
     #"<size> <color> <shape> template"
-    if "small red cubes" in shapedict:
+    if shapedict["small red cubes"]:
         templatedict["small red cubes"] = "<size> <color> <shape> template"
-    if "big red cubes" in shapedict:
+    if shapedict["big red cubes"]:
         templatedict["big red cubes"] = "<size> <color> <shape> template"
-    if "small green cubes" in shapedict:
+    if shapedict["small green cubes"]:
         templatedict["small green cubes"] = "<size> <color> <shape> template"
-    if "big green cubes" in shapedict:
+    if shapedict["big green cubes"]:
         templatedict["big green cubes"] = "<size> <color> <shape> template"
-    if "big red spheres" in shapedict:
+    if shapedict["big red spheres"]:
         templatedict["big red spheres"] = "<size> <color> <shape> template"
-    if "small red spheres" in shapedict:
+    if shapedict["small red spheres"]:
         templatedict["small red spheres"] = "<size> <color> <shape> template"
-    if "big green spheres" in shapedict:
+    if shapedict["big green spheres"]:
         templatedict["big green spheres"] = "<size> <color> <shape> template"
-    if "small green spheres" in shapedict:
+    if shapedict["small green spheres"]:
         templatedict["small green spheres"] = "<size> <color> <shape> template"
 
     return templatedict
