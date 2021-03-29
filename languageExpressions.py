@@ -210,7 +210,7 @@ def generate_templates(shapedict):
     #"<col> <shape> template"
     if shapedict["red cubes"]:
         templatedict["red cubes"] = "<col> <shape> template"
-    if shapedict["green cubes"]:
+    if "green cubes" in shapedict:
         templatedict["green cubes"]= "<col> <shape> template"
     if shapedict["red spheres"]:
         templatedict["red spheres"] = "<col> <shape> template"
@@ -407,12 +407,12 @@ def main():
                 attribute_indexes["green"].append(index)
             if item.size == "small":
                 attribute_indexes["small"].append(index)
-            if item.size == "large":
-                attribute_indexes["large"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
             if item.shape == "sphere":
                 attribute_indexes["sphere"].append(index)
-            if item.shape == "cube":
-                attribute_indexes["cube"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
         
         #collect the data
         shapedict = generate_expressions(attribute_indexes)
