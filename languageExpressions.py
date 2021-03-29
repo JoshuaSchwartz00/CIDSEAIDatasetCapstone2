@@ -269,101 +269,101 @@ def generate_expressions(attribute_indexes):
     #object template
     if "red" in attribute_indexes:
         shapedict["red objects"] = attribute_indexes["red"]
-    if attribute_indexes["green"]:
+    if "green" in attribute_indexes:
         shapedict["green objects"] = attribute_indexes["green"]
-    if attribute_indexes["box"]:
+    if "box" in attribute_indexes:
         shapedict["cubes"] = attribute_indexes["box"]
-    if attribute_indexes["sphere"]:
+    if "box" in attribute_indexes:
         shapedict["spheres"] = attribute_indexes["sphere"]
-    if attribute_indexes["big"]:
+    if "big" in attribute_indexes:
         shapedict["big objects"] = attribute_indexes["big"]
-    if attribute_indexes["small"]:
+    if "small" in attribute_indexes:
         shapedict["small objects"] = attribute_indexes["small"]
 
     #color shape template
-    if attribute_indexes["red"] and attribute_indexes["box"]:
+    if "red" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["red"]) & set(attribute_indexes["box"])):
             shapedict["red cubes"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["box"]))
 
 
-    if attribute_indexes["green"] and attribute_indexes["box"]:
+    if "green" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["green"]) & set(attribute_indexes["box"])):
             shapedict["green cubes"] = list(set(attribute_indexes["green"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["red"] and attribute_indexes["sphere"]:
+    if "red" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"])):
             shapedict["red sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
-    if attribute_indexes["green"] and attribute_indexes["sphere"]:
+    if "green" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
             shapedict["green sphere"] = list(set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
     #color size template
-    if attribute_indexes["small"] and attribute_indexes["red"]:
+    if "small" in attribute_indexes and "red" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["red"])):
             shapedict["small red objects"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]))
 
-    if attribute_indexes["big"] and attribute_indexes["red"]:
+    if "big" in attribute_indexes and "red" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["red"])):
             shapedict["big red objects"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]))
 
-    if attribute_indexes["small"] and attribute_indexes["green"]:
+    if "small" in attribute_indexes and "green" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["green"])):
             shapedict["small green objects"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]))
 
 
-    if attribute_indexes["big"] and attribute_indexes["green"]:
+    if "big" in attribute_indexes and "green" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["green"])):
             shapedict["big green"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]))
 
     #size shape template
-    if attribute_indexes["small"] and attribute_indexes["box"]:
+    if "small" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["box"])):
             shapedict["small cubes"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["big"] and attribute_indexes["box"]:
+    if "big" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["box"])):
             shapedict["big cubes"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["small"] and attribute_indexes["sphere"]:
+    if "small" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["sphere"])):
             shapedict["small spheres"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["sphere"]))
 
-    if attribute_indexes["big"] and attribute_indexes["sphere"]:
+    if "big" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["sphere"])):
             shapedict["big spheres"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["sphere"]))
 
     #size color shape template
 
-    if attribute_indexes["small"] and attribute_indexes["red"] and attribute_indexes["box"]:
+    if "small" in attribute_indexes and "red" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]) & set(attribute_indexes["box"])):
             shapedict["small red cubes"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["big"] and attribute_indexes["red"] and attribute_indexes["box"]:
+    if "big" in attribute_indexes and "red" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]) & set(attribute_indexes["box"])):
             shapedict["big red cubes"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["small"] and attribute_indexes["green"] and attribute_indexes["box"]:
+    if "small" in attribute_indexes and "green" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["box"])):
             shapedict["small green cubes"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["big"] and attribute_indexes["green"] and attribute_indexes["box"]:
+    if "big" in attribute_indexes and "green" in attribute_indexes and "box" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]) & set(attribute_indexes["box"])):
             shapedict["big green cubes"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]) & set(attribute_indexes["box"]))
 
-    if attribute_indexes["big"] and attribute_indexes["red"] and attribute_indexes["sphere"]:
+    if "big" in attribute_indexes and "red" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]) & set(attribute_indexes["sphere"])):
             shapedict["big red spheres"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
-    if attribute_indexes["small"] and attribute_indexes["red"] and attribute_indexes["sphere"]:
+    if "small" in attribute_indexes and "red" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]) & set(attribute_indexes["sphere"])):
             shapedict["small red spheres"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["red"]) & set(attribute_indexes["sphere"]))
 
-    if attribute_indexes["big"] and attribute_indexes["green"] and attribute_indexes["sphere"]:
+    if "big" in attribute_indexes and "green" in attribute_indexes and "sphere" in attribute_indexes:
         if  list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
             shapedict["big green spheres"] = list(set(attribute_indexes["big"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"]))
 
-    if attribute_indexes["small"] and attribute_indexes["green"] and attribute_indexes["sphere"]:
+    if "small" in attribute_indexes and "green" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
             shapedict["small green spheres"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"]))
          
