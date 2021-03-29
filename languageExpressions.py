@@ -217,7 +217,7 @@ def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
     targetcolumns.append(list())
 
     for coordx, coordy in targetMatrix:
-        targetcolumns.append((coordx, coordy))
+        targetcolumns[coordx].append((coordx, coordy))
 
     relativeColumnsExist = list()
     relativeColumnsExist.append(False)
@@ -226,21 +226,21 @@ def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
 
     for coordx, coordy in relativeMatrix:
         relativeColumnsExist[coordx] = True
-    print(relativeColumnsExist)
+
     for exist,idx in enumerate(relativeColumnsExist):
         if exist:
             iter_range = list()
             if relativeDirection == 'from left':
-                iter_range = reversed(range(0, idx))
+                iter_range = range(0, idx)
             else:
                 iter_range = range(idx+1, grid_length)
 
             loc_counter = number
             targetObject = None
+
             for i in iter_range:
-                loc_counter = loc_counter - len(targetcolumns[i])
-                print(loc_counter)
-                print(len(targetcolumns[i]))
+                loc_counter -= len(targetcolumns[i])
+                # print(loc_counter, i)
                 if loc_counter == 0 and len(targetcolumns[i]) == 1:
                     targetObject = targetcolumns[i][0]
                     break
@@ -249,7 +249,6 @@ def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
 
             if targetObject is not None:
                 outputset.add(targetObject)
-    print(outputset)
     return outputset
 
 #generate a list of tuples for each expression: (referring expression, template, (1,3 if it applies to objects 1 and 3))
