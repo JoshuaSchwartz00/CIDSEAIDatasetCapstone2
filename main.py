@@ -1,8 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
 import itertools
 import time
 import os
@@ -13,34 +8,35 @@ from random import shuffle, randint
 
 list_scenes = list()
 scenes_count = 1  # to store the file number
-pixelCoorDict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
-                 (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
-                 (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
+pixel_coordinate_dict = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
+                         (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
+                         (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
 
-# Press the green button in the gutter to run the script.
+
 class objects:
-
-    def __init__(self, size, colors, shape, location): 
-        #objects can be: small or big, red or green, box or sphere
+    def __init__(self, size, colors, shape, location):
+        # objects can be: small or big, red or green, box or sphere
         self.size = size
         self.color = colors
         self.shape = shape
         self.location = location  # a tuple (x, y, z)
+        self.normalized_location = None  # origin is top-left
+        self.pixel_location = None  # mapping from location -> pixel coordinates via dictionary
 
     def getPixCoordinaet(self):
-        return pixelCoorDict[self.location]
+        return pixel_coordinate_dict[self.location]
 
     def transform_coordinate(self):
         coordinate_list = list()
 
-        #for i in self.location:
+        # for i in self.location:
         if self.location[0] == -2:
             coordinate_list.append(0)
         elif self.location[0] == 0:
             coordinate_list.append(1)
         elif self.location[0] == 2:
             coordinate_list.append(2)
-        
+
         if self.location[1] == -2:
             coordinate_list.append(2)
         elif self.location[1] == 0:
@@ -53,24 +49,13 @@ class objects:
         return tuple(coordinate_list)
 
 
-class scene:
-    image_location = ""  # filename
-    list_objects = list()
-    objects_tuples = list() #info = [index, item.color, item.shape, item.size, item.location]
-    grid = () #(3,3)
-    #tuple/list = (ref expr, template, (1,3 if it applies to objects 1 and 3))
-    list_expressions = list() #(index, color, shape, size)
-    
-    #old
-    # {c1.size} objects" : ["<size> object template"]
-    # {'small objects': '<size> object template', 'red objects': '<col> object template', 'cubes': '<shape> template', 'red cubes': '<col> <shape> template', 'small red objects': '<size> <col> object template', 'small cubes': '<size> <shape> object template', 'small red cubes': '<size> <color> <shape> template'}
-    
-    
-    list_segmented_image = list()  # ((c1.size) objects, <size> object, segmented image path)
-
-    def __init__(self, im_location, list_objects):
-        self.image_location = im_location
+class Scene:
+    def __init__(self, image_location, list_objects):
+        self.image_location = image_location
         self.list_objects = list_objects
+        self.objects_tuples = []  # info = [index, item.color, item.shape, item.size, item.location]
+        self.list_expressions = []  # (ref expr, template, (1,3 if it applies to objects 1 and 3))
+        self.list_segmented_image = []  # ((c1.size) objects, <size> object, segmented image path)
 
 
 def draw_box(position, colors, size):
@@ -96,6 +81,7 @@ def draw_sphere(position, colors, size):
         the_color = color.red
     sphere(color=the_color, pos=position, radius=radius)
 
+
 def isOverlap(object_list, obj):
     (colors, size, shape, pos) = obj
     for obj_t in object_list:
@@ -105,7 +91,7 @@ def isOverlap(object_list, obj):
         if colors == colors and size == size1 and shape == shape1:
             return True
     return False
-    
+
 
 def draw_objects(obj_in_the_sence, list_object):
     this_obj = permutation_list[randint(0, len(permutation_list) - 1)]
@@ -140,7 +126,7 @@ def capture_image(list_object, sence):
     scenes_count += 1
     im.save(filename)
     # storing data to objects
-    scene_obj = scene(filename, list_object)
+    scene_obj = Scene(filename, list_object)
     list_scenes.append(scene_obj)
     # reset the canvas
     canvas.delete(self=sence)
@@ -149,12 +135,13 @@ def capture_image(list_object, sence):
 if __name__ == '__main__':
     # =====  Generating permutation list  =====
     all_list = [["red", "green"], ["big", "small"], ["box", "sphere"],
-                [(-2, -2, 0), (-2, 0, 0), (-2, 2, 0), (0, -2, 0), (0, 0, 0), (0, 2, 0), (2, -2, 0), (2, 0, 0), (2, 2, 0)]]
+                [(-2, -2, 0), (-2, 0, 0), (-2, 2, 0), (0, -2, 0), (0, 0, 0), (0, 2, 0), (2, -2, 0), (2, 0, 0),
+                 (2, 2, 0)]]
     permutation_list = list(itertools.product(*all_list))
     shuffle(permutation_list)  # To shuffle the list
-    
-# ===== Make scenes of objects  =====
-    for idx1 in range(0, (8*8*8*8+8*8*8+8*8)):
+
+    # ===== Make scenes of objects  =====
+    for idx1 in range(0, (8 * 8 * 8 * 8 + 8 * 8 * 8 + 8 * 8)):
         sence = canvas(width=500, height=500)
         list_object = list()
         obj_in_the_sence = list()
@@ -166,7 +153,6 @@ if __name__ == '__main__':
             (obj_in_the_sence, list_object) = draw_objects(obj_in_the_sence, list_object)
         capture_image(list_object, sence)
 
-
     # # ===== To print the objects in each scenes =====
     # for sence in list_scenes:
     #     print(sence.image_location)
@@ -175,4 +161,3 @@ if __name__ == '__main__':
     #         print(obj.shape)
     #         print(obj.color)
     #         print(obj.location)
-
