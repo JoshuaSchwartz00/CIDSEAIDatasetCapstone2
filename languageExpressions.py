@@ -66,7 +66,7 @@ def random_choice(attribute_indexes):
 
 def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
 
-
+    location_expression_list = []
     list1 = ["from left", "from right"]
     list2 = ["leftmost", "rightmost", "mid", "topmost", "bottommost"]
     list3 = ["right to", "left to", "top to", "bottom to", "top-left to", "top-right to", "bottom-left to", "bottom-right to"]
@@ -80,28 +80,29 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
     from_absolute_output = ""
     relative_output = ""
     mid_output = ""
+    from_relative_tuple = set()
     
     choices[2] = "left to"
-    choices[1] = "mid"
+    choices[1] = "leftmost"
     choices[0] = "from left"
 
 
     if choices[0] == "from left" or choices[0] == "from right":
 
         target_choice = random_choice(attribute_indexes)
-        relative_choice = random_choice(attribute_indexes)
-
+        index = -1
         target_matrix = transform(attribute_indexes[target_choice])
-        relative_matrix = transform(attribute_indexes[relative_choice])
 
-        print(target_matrix, relative_matrix)
         for i in range(1, 5):
-            from_relative_output = from_relative(target_matrix, relative_matrix, choices[0], i) #what is number?
+            from_relative_output = from_relative(target_matrix, choices[0], i) #what is number?
 
             if len(from_relative_output) > 0:
+                index = i
                 break
-        print(from_relative_output, len(from_relative_output))
 
+        if index != -1:
+            from_relative_tuple = generate_from_relative_expr(list(from_relative_output), target_choice, choices[0], index)
+       
     if choices[1] == "rightmost" or choices[1] == "leftmost" or choices[1] == "topmost" or choices[1] == "bottommost":
 
         key_choice = random_choice(attribute_indexes)
@@ -109,6 +110,8 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
         matrix = transform(attribute_indexes[key_choice])
         
         from_absolute = absolute(matrix, choices[1])
+
+        absolute_tuple = generate_absolute_expr(list(matrix), key_choice, choices[1])
 
     elif choices[1] == "mid":
 
@@ -130,10 +133,128 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
 
         relative_output = relative(target_matrix, relative_matrix, choices[2])
 
+        relative_tuple = generate_relative_expr(list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[2])
 
-    return [from_relative_output, from_absolute_output, relative_output, mid_output]
+
+    return [from_relative_tuple, absolute_tuple, mid_output, relative_tuple]
 
     
+def generate_from_relative_expr(from_relative_output, target_choice, expression_connector, index):
+
+    expression_tuple = list()
+    index_list = list()
+    expression = ""
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == from_relative_output[0][0] and obj[4][1] == from_relative_output[0][1]:
+            index_list.append(obj[0])
+
+    if index == 1:
+        expression += "first "
+    elif index == 2:
+        expression += "second "
+    elif index == 3:
+        expression += "third "
+    else:
+        expression += "forth "
+    
+    expression += target_choice + " object " + expression_connector
+
+    if expression_connector == "from left":
+        expression_tuple.append(expression)
+        expression_tuple.append('x from left')
+        expression_tuple.append(tuple(index_list))
+    else:
+        expression_tuple.append(expression)
+        expression_tuple.append('x from right')
+        expression_tuple.append(tuple(index_list))
+
+    return tuple(expression_tuple)
+
+def generate_absolute_expr(absolute_output, key_choice, expression_connector):
+
+    expression_tuple = list()
+    index_list = list()
+    expression = ""
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == absolute_output[0][0] and obj[4][1] == absolute_output[0][1]:
+            index_list.append(obj[0])
+    
+    expression += expression_connector + " " + key_choice + " object"
+
+    if expression_connector == "leftmost":
+        expression_tuple.append(expression)
+        expression_tuple.append('leftmost x')
+        expression_tuple.append(tuple(index_list))
+
+    else:
+        expression_tuple.append(expression)
+        expression_tuple.append('rightmost x')
+        expression_tuple.append(tuple(index_list))
+
+    return tuple(expression_tuple)
+
+def generate_middle_expr():
+    pass
+
+def generate_relative_expr(target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
+    expression_tuple = list()
+    index_list = list()
+    expression = ""
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == target_matrix[0][0] and obj[4][1] == target_matrix[0][1]:
+            index_list.append(obj[0])
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == relative_matrix[0][0] and obj[4][1] == relative_matrix[0][1]:
+            index_list.append(obj[0])
+    
+    expression += target_choice + " object " + expression_connector + " " + relative_choice + " object"
+
+    if expression_connector == "left to":
+        expression_tuple.append(expression)
+        expression_tuple.append('left to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "right to":
+        expression_tuple.append(expression)
+        expression_tuple.append('right to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "top to":
+        expression_tuple.append(expression)
+        expression_tuple.append('top to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "bottom to":
+        expression_tuple.append(expression)
+        expression_tuple.append('bottom to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "top-left to":
+        expression_tuple.append(expression)
+        expression_tuple.append('top-left to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "top-right to":
+        expression_tuple.append(expression)
+        expression_tuple.append('top-right to x')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "bottom-left to":
+        expression_tuple.append(expression)
+        expression_tuple.append('bottom-left to')
+        expression_tuple.append(tuple(index_list))
+    
+    else:
+        expression_tuple.append(expression)
+        expression_tuple.append('bottom-right to')
+        expression_tuple.append(tuple(index_list))
+
+    return tuple(expression_tuple)
+
 
 
 #matrix define as set of tuple(x-cord, y-cord)
@@ -207,7 +328,7 @@ def absolute(targetMatrix, absoluteDirection):
     else:
         return coordinate
 
-def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
+def from_relative(targetMatrix, relativeDirection, number):
     grid_length = 3
     outputset = set()
 
@@ -219,37 +340,27 @@ def from_relative(targetMatrix, relativeMatrix, relativeDirection, number):
     for coordx, coordy in targetMatrix:
         targetcolumns[coordx].append((coordx, coordy))
 
-    relativeColumnsExist = list()
-    relativeColumnsExist.append(False)
-    relativeColumnsExist.append(False)
-    relativeColumnsExist.append(False)
+    iter_range = list()
+    if relativeDirection == 'from left':
+        iter_range = range(0,3)
+    else:
+        iter_range = reversed(range(0,3))
 
-    for coordx, coordy in relativeMatrix:
-        relativeColumnsExist[coordx] = True
+    targetObject = None
 
-    for exist,idx in enumerate(relativeColumnsExist):
-        if exist:
-            iter_range = list()
-            if relativeDirection == 'from left':
-                iter_range = range(0, idx)
-            else:
-                iter_range = range(idx+1, grid_length)
+    for i in iter_range:
+        number -= len(targetcolumns[i])
+        if number == 0 and len(targetcolumns[i]) == 1:
+            targetObject = targetcolumns[i][0]
+            break
+        elif number < 0:
+            break
 
-            loc_counter = number
-            targetObject = None
+    if targetObject is not None:
+        outputset.add(targetObject)
 
-            for i in iter_range:
-                loc_counter -= len(targetcolumns[i])
-                # print(loc_counter, i)
-                if loc_counter == 0 and len(targetcolumns[i]) == 1:
-                    targetObject = targetcolumns[i][0]
-                    break
-                elif loc_counter < 0:
-                    break
-
-            if targetObject is not None:
-                outputset.add(targetObject)
     return outputset
+
 
 #generate a list of tuples for each expression: (referring expression, template, (1,3 if it applies to objects 1 and 3))
 def generate_tuples(shapedict, templatedict):
