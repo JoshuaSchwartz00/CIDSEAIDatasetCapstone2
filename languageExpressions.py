@@ -42,6 +42,7 @@ def transform(scene, list_indexes):
 
     return new_set
 
+####RICKY FIX HERE#####
 def random_choice(attribute_indexes):
 
     local_keys = list(attribute_indexes.keys())
@@ -86,7 +87,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
 
 
     if choices[0] == "from left" or choices[0] == "from right":
-
+        ####RICKY FIX HERE - USE WHILE LOOP#####
         target_choice = random_choice(attribute_indexes)
         index = -1
         target_matrix = transform(scene, attribute_indexes[target_choice])
@@ -102,7 +103,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
             from_relative_tuple = generate_from_relative_expr(scene, list(from_relative_output), target_choice, choices[0], index)
        
     if choices[1] == "rightmost" or choices[1] == "leftmost" or choices[1] == "topmost" or choices[1] == "bottommost":
-
+        ####RICKY FIX HERE - USE WHILE LOOP#####
         key_choice = random_choice(attribute_indexes)
 
         matrix = transform(scene, attribute_indexes[key_choice])
@@ -112,7 +113,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
         absolute_tuple = generate_absolute_expr(scene, list(matrix), key_choice, choices[1])
 
     elif choices[1] == "mid":
-
+        ####RICKY FIX HERE - USE WHILE LOOP#####
         target_choice = random_choice(attribute_indexes)
         relative_choice = random_choice(attribute_indexes)
 
@@ -124,7 +125,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
         middle_tuple = generate_middle_expr(scene, list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[1])
 
     if choices[2] == "left to" or choices[2] == "right to" or choices[2] == "top to" or choices[2] == "bottom to" or choices[2] == "top-left to" or choices[2] == "top-right to" or choices[2] == "bottom-left to" or choices[2] == "bottom-right to":
-
+        ####RICKY FIX HERE - USE WHILE LOOP#####
         target_choice = random_choice(attribute_indexes)
         relative_choice = random_choice(attribute_indexes)
 
@@ -643,7 +644,9 @@ def main():
         expressionlist = generate_tuples(shapedict, templatedict)
         
         location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
-        scene_ob.list_expressions = expressionlist #set the attribute in the scene object
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
 
 
         print("SHAPEDICT: ")
@@ -657,6 +660,9 @@ def main():
         print()
         print("LOCATION EXPRESSIONS: ")
         print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
 
 
 
