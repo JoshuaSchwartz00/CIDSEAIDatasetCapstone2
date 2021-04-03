@@ -31,7 +31,7 @@ from main import Scene
  
 #scene.list_expressions.update(shapedict)
 
-
+#returns a set of locations if the index matches
 def transform(scene, list_indexes):
     new_set = set()
 
@@ -42,6 +42,7 @@ def transform(scene, list_indexes):
 
     return new_set
 
+#chooses a random object to impose a language expression on
 ####RICKY FIX HERE#####
 def random_choice(attribute_indexes):
 
@@ -59,9 +60,10 @@ def random_choice(attribute_indexes):
         
     return key_choice[0]
 
-
+#generates 3 language expressions per scene, one each for relative, absolute, and middle positions
 def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
 
+    #instantiate expression lists the code is going to pull from
     location_expression_list = []
     list1 = ["from left", "from right"]
     list2 = ["leftmost", "rightmost", "mid", "topmost", "bottommost"]
@@ -81,10 +83,12 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
     middle_tuple = ()
     relative_tuple = ()
     
+    #hard coded
     choices[2] = "left to"
     choices[1] = "leftmost"
     choices[0] = "from left"
 
+    #run functions that generate the matrix positions of the output for all types of positional expressions: relative, absolute, and middle
 
     if choices[0] == "from left" or choices[0] == "from right":
         ####RICKY FIX HERE - USE WHILE LOOP#####
@@ -139,7 +143,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
 
     return [from_relative_tuple, absolute_tuple, middle_tuple, relative_tuple]
 
-    
+#creates  an expression involving "xth from the..." relative position
 def generate_from_relative_expr(scene, from_relative_output, target_choice, expression_connector, index):
 
     expression_tuple = list()
@@ -172,6 +176,7 @@ def generate_from_relative_expr(scene, from_relative_output, target_choice, expr
 
     return tuple(expression_tuple)
 
+#creates an expression involving absolute position
 def generate_absolute_expr(scene, absolute_output, key_choice, expression_connector):
 
     expression_tuple = list()
@@ -206,6 +211,7 @@ def generate_absolute_expr(scene, absolute_output, key_choice, expression_connec
 
     return tuple(expression_tuple)
 
+#creates an expression involving objects in the middle of the image
 def generate_middle_expr(scene, target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
     
     expression_tuple = list()
@@ -228,6 +234,7 @@ def generate_middle_expr(scene, target_matrix, relative_matrix, target_choice, r
 
     return tuple(expression_tuple)
 
+#creates an expression involving relative position
 def generate_relative_expr(scene, target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
     expression_tuple = list()
     index_list = list()
@@ -288,7 +295,7 @@ def generate_relative_expr(scene, target_matrix, relative_matrix, target_choice,
 
 
 #matrix define as set of tuple(x-cord, y-cord)
-
+#sets the relative position according to the image matrix
 def relative(targetMatrix, relativeMatrix, relativeDirection): #left to/right to
 
     grid_length = 3
@@ -320,6 +327,7 @@ def relative(targetMatrix, relativeMatrix, relativeDirection): #left to/right to
 
     return outputset
 
+#sets the middle position according to the image matrix
 def middle(targetMatrix, relativeMatrix):
     outputset = set()
     for x_coord, y_coord in targetMatrix:
@@ -329,6 +337,7 @@ def middle(targetMatrix, relativeMatrix):
             outputset.add(x_coord,y_coord)
     return outputset
 
+#sets the absolute position according to the iamge matrix
 def absolute(targetMatrix, absoluteDirection):
 
     grid_length = 3
@@ -358,6 +367,7 @@ def absolute(targetMatrix, absoluteDirection):
     else:
         return coordinate
 
+#finds the target object and returns it in an output set
 def from_relative(targetMatrix, relativeDirection, number):
     grid_length = 3
     outputset = set()
