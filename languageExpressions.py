@@ -6,8 +6,6 @@ from main import list_scenes
 from main import objects
 from main import scene
 
-
-
     #print(exrex.generate('This is (a (code|cake|test)|an (apple|elf|output))\.'))
     #print("\n".join(exrex.generate('This is (a (color|cake|test)|an (apple|elf|output))\.')))
     #print("\n".join(exrex.generate('(small|large) (red|green) (cube|sphere)')))
@@ -123,6 +121,8 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
 
         middle(target_matrix, relative_matrix)
 
+        middle_tuple = generate_middle_expr(list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[1])
+
     if choices[2] == "left to" or choices[2] == "right to" or choices[2] == "top to" or choices[2] == "bottom to" or choices[2] == "top-left to" or choices[2] == "top-right to" or choices[2] == "bottom-left to" or choices[2] == "bottom-right to":
 
         target_choice = random_choice(attribute_indexes)
@@ -136,7 +136,7 @@ def generate_location_expr(shapedict, templatedict, attribute_indexes, scene):
         relative_tuple = generate_relative_expr(list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[2])
 
 
-    return [from_relative_tuple, absolute_tuple, mid_output, relative_tuple]
+    return [from_relative_tuple, absolute_tuple, middle_tuple, relative_tuple]
 
     
 def generate_from_relative_expr(from_relative_output, target_choice, expression_connector, index):
@@ -162,11 +162,11 @@ def generate_from_relative_expr(from_relative_output, target_choice, expression_
 
     if expression_connector == "from left":
         expression_tuple.append(expression)
-        expression_tuple.append('x from left')
+        expression_tuple.append('x from left template')
         expression_tuple.append(tuple(index_list))
     else:
         expression_tuple.append(expression)
-        expression_tuple.append('x from right')
+        expression_tuple.append('x from right template')
         expression_tuple.append(tuple(index_list))
 
     return tuple(expression_tuple)
@@ -185,18 +185,47 @@ def generate_absolute_expr(absolute_output, key_choice, expression_connector):
 
     if expression_connector == "leftmost":
         expression_tuple.append(expression)
-        expression_tuple.append('leftmost x')
+        expression_tuple.append('leftmost x template')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "topmost":
+        expression_tuple.append(expression)
+        expression_tuple.append('topmost x template')
+        expression_tuple.append(tuple(index_list))
+
+    elif expression_connector == "bottommost":
+        expression_tuple.append(expression)
+        expression_tuple.append('bottommost x template')
         expression_tuple.append(tuple(index_list))
 
     else:
         expression_tuple.append(expression)
-        expression_tuple.append('rightmost x')
+        expression_tuple.append('rightmost x template')
         expression_tuple.append(tuple(index_list))
 
     return tuple(expression_tuple)
 
-def generate_middle_expr():
-    pass
+def generate_middle_expr(target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
+    
+    expression_tuple = list()
+    index_list = list()
+    expression = ""
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == target_matrix[0][0] and obj[4][1] == target_matrix[0][1]:
+            index_list.append(obj[0])
+
+    for obj in scene.objects_tuples:
+        if obj[4][0] == relative_matrix[0][0] and obj[4][1] == relative_matrix[0][1]:
+            index_list.append(obj[0])
+
+    expression += expression_connector + " " + target_choice + " object"
+
+    expression_tuple.append(expression)
+    expression_tuple.append('mid template')
+    expression_tuple.append(tuple(index_list))
+
+    return tuple(expression_tuple)
 
 def generate_relative_expr(target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
     expression_tuple = list()
@@ -215,42 +244,42 @@ def generate_relative_expr(target_matrix, relative_matrix, target_choice, relati
 
     if expression_connector == "left to":
         expression_tuple.append(expression)
-        expression_tuple.append('left to x')
+        expression_tuple.append('left to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "right to":
         expression_tuple.append(expression)
-        expression_tuple.append('right to x')
+        expression_tuple.append('right to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "top to":
         expression_tuple.append(expression)
-        expression_tuple.append('top to x')
+        expression_tuple.append('top to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "bottom to":
         expression_tuple.append(expression)
-        expression_tuple.append('bottom to x')
+        expression_tuple.append('bottom to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "top-left to":
         expression_tuple.append(expression)
-        expression_tuple.append('top-left to x')
+        expression_tuple.append('top-left to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "top-right to":
         expression_tuple.append(expression)
-        expression_tuple.append('top-right to x')
+        expression_tuple.append('top-right to x template')
         expression_tuple.append(tuple(index_list))
 
     elif expression_connector == "bottom-left to":
         expression_tuple.append(expression)
-        expression_tuple.append('bottom-left to')
+        expression_tuple.append('bottom-left to template')
         expression_tuple.append(tuple(index_list))
     
     else:
         expression_tuple.append(expression)
-        expression_tuple.append('bottom-right to')
+        expression_tuple.append('bottom-right to template')
         expression_tuple.append(tuple(index_list))
 
     return tuple(expression_tuple)
