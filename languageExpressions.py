@@ -4,7 +4,7 @@ import main
 import random
 from main import list_scenes
 from main import objects
-from main import scene
+from main import Scene
 
     #print(exrex.generate('This is (a (code|cake|test)|an (apple|elf|output))\.'))
     #print("\n".join(exrex.generate('This is (a (color|cake|test)|an (apple|elf|output))\.')))
@@ -39,7 +39,7 @@ def transform(list_indexes):
     new_set = set()
 
     for i in list_indexes:
-        for obj in scene.objects_tuples:
+        for obj in Scene.objects_tuples:
             if i == obj[0]:
                 new_set.add((obj[4][0], obj[4][1])) #info = [index, item.color, item.shape, item.size, item.location]
 
@@ -145,7 +145,7 @@ def generate_from_relative_expr(from_relative_output, target_choice, expression_
     index_list = list()
     expression = ""
 
-    for obj in scene.objects_tuples:
+    for obj in Scene.objects_tuples:
         if obj[4][0] == from_relative_output[0][0] and obj[4][1] == from_relative_output[0][1]:
             index_list.append(obj[0])
 
@@ -177,7 +177,7 @@ def generate_absolute_expr(absolute_output, key_choice, expression_connector):
     index_list = list()
     expression = ""
 
-    for obj in scene.objects_tuples:
+    for obj in Scene.objects_tuples:
         if obj[4][0] == absolute_output[0][0] and obj[4][1] == absolute_output[0][1]:
             index_list.append(obj[0])
     
@@ -232,11 +232,11 @@ def generate_relative_expr(target_matrix, relative_matrix, target_choice, relati
     index_list = list()
     expression = ""
 
-    for obj in scene.objects_tuples:
+    for obj in Scene.objects_tuples:
         if obj[4][0] == target_matrix[0][0] and obj[4][1] == target_matrix[0][1]:
             index_list.append(obj[0])
 
-    for obj in scene.objects_tuples:
+    for obj in Scene.objects_tuples:
         if obj[4][0] == relative_matrix[0][0] and obj[4][1] == relative_matrix[0][1]:
             index_list.append(obj[0])
     
@@ -597,7 +597,7 @@ def main():
     list_object.append(object_1)
     list_object.append(object_2)
 
-    scene_1 = scene("", list_object)
+    scene_1 = Scene("", list_object)
 
     list_scenes.append(scene_1)
 
@@ -636,8 +636,8 @@ def main():
         shapedict = generate_expressions(attribute_indexes)
         templatedict = generate_templates(shapedict)
         expressionlist = generate_tuples(shapedict, templatedict)
-        scene.list_expressions = expressionlist #set the attribute in the scene object
-        location_expressions = generate_location_expr(shapedict, templatedict, attribute_indexes, scene)
+        Scene.list_expressions = expressionlist #set the attribute in the scene object
+        location_expressions = generate_location_expr(shapedict, templatedict, attribute_indexes, Scene)
 
         print("SHAPEDICT: ")
         print(shapedict)

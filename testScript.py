@@ -5,13 +5,13 @@ import glob
 
 ## image generation tests
 
-#image generation script generates 500+ images
+#image generation script generates 4000+ images
 def test1() -> bool:
     image_path_files = glob.glob(os.getcwd() + "\\img\\*.jpg")
 
     image_count = len(image_path_files)
 
-    return image_count > 500
+    return image_count > 4000
 
 #Image generation script generates images with the desired properties/configurations. 
 def test2() -> bool:
@@ -20,7 +20,7 @@ def test2() -> bool:
 
 ## language expression tests
 
-#Language expression generation script generates all possible language expressions for all 500 generated image scenes. 
+#Language expression generation script generates all possible language expressions for all 4000 generated image scenes. 
 def test3() -> bool:
     pass
 
@@ -54,13 +54,6 @@ def test6() -> bool:
 if __name__ == "__main__":
     #command = "python main.py"
     #os.system(command)
-
-    #gets all the data
-    with open("templates_joshua.json") as f:
-        template_data = json.load(f)
-
-    with open("generated.json") as f:
-        generated_data = json.load(f)
     
     #runs all the tests
     if(test1()):
