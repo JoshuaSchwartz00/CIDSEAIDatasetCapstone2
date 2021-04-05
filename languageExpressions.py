@@ -45,7 +45,7 @@ def transform(scene, list_indexes):
 #chooses a random object to impose a language expression on
 ####RICKY FIX HERE#####
 def random_choice(attribute_indexes):
-
+    print(attribute_indexes)
     local_keys = list(attribute_indexes.keys())
     key_choice = ""
 
@@ -60,14 +60,36 @@ def random_choice(attribute_indexes):
         
     return key_choice[0]
 
+
+def valid_attribute_key_filter(attribute_indexes):
+    valid_keys = list()
+
+    for key in list(attribute_indexes.keys()):
+        if len(attribute_indexes[key]) > 0 :
+            valid_keys.append(key)
+    return valid_keys
+
+def permute_pair(attribute_indexes):
+
+    valid_keys_pair = list()
+
+    valid_keys = valid_attribute_key_filter(attribute_indexes)
+    
+    for valid_key in valid_keys:
+        for valid_key2 in valid_keys:
+            valid_keys_pair.append((valid_key, valid_key2))
+    return valid_keys_pair
+
+
+
 #generates 3 language expressions per scene, one each for relative, absolute, and middle positions
 def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
 
     #instantiate expression lists the code is going to pull from
     location_expression_list = []
     list1 = ["from left", "from right"]
-    list2 = ["leftmost", "rightmost", "mid", "topmost", "bottommost"]
-    list3 = ["right to", "left to", "top to", "bottom to", "top-left to", "top-right to", "bottom-left to", "bottom-right to"]
+    list2 = ["leftmost", "rightmost", "topmost", "bottommost"]
+    list3 = ["right to", "left to", "top to", "bottom to", "top-left to", "top-right to", "bottom-left to", "bottom-right to", "middle of"]
 
     choices = []
     choices.append(random.choice(list1))
@@ -92,56 +114,89 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
 
     if choices[0] == "from left" or choices[0] == "from right":
         ####RICKY FIX HERE - USE WHILE LOOP#####
-        target_choice = random_choice(attribute_indexes)
-        index = -1
-        target_matrix = transform(scene, attribute_indexes[target_choice])
 
-        for i in range(1, 5):
-            from_relative_output = from_relative(target_matrix, choices[0], i) #what is number?
+        valid_keys = valid_attribute_key_filter(attribute_indexes)
 
-            if len(from_relative_output) > 0:
-                index = i
-                break
+        found = False
+        while(len(valid_keys) > 0 and not found):
+            target_key = random.choices(valid_keys)[0]
+            valid_keys.remove(target_key)
 
-        if index != -1:
-            from_relative_tuple = generate_from_relative_expr(scene, list(from_relative_output), target_choice, choices[0], index)
+            # target_choice = attribute_indexes[target_key]
+            index = -1
+            target_matrix = transform(scene, attribute_indexes[target_key])
+
+            for i in range(1, 5):
+                from_relative_output = from_relative(target_matrix, choices[0], i) #what is number?
+
+                if len(from_relative_output) > 0:
+                    index = i
+                    break
+
+            if index != -1:
+                from_relative_tuple = generate_from_relative_expr(scene, list(from_relative_output), target_key, choices[0], index)
+                found = True
        
     if choices[1] == "rightmost" or choices[1] == "leftmost" or choices[1] == "topmost" or choices[1] == "bottommost":
         ####RICKY FIX HERE - USE WHILE LOOP#####
-        key_choice = random_choice(attribute_indexes)
+        valid_keys = valid_attribute_key_filter(attribute_indexes)
 
-        matrix = transform(scene, attribute_indexes[key_choice])
-        
-        from_absolute = absolute(matrix, choices[1])
+        found = False
+        while(len(valid_keys) > 0 and not found):
+            target_key = random.choices(valid_keys)[0]
+            valid_keys.remove(target_key)
 
-        absolute_tuple = generate_absolute_expr(scene, list(matrix), key_choice, choices[1])
+            matrix = transform(scene, attribute_indexes[target_key])
+            
+            from_absolute = absolute(matrix, choices[1])
 
-    elif choices[1] == "mid":
-        ####RICKY FIX HERE - USE WHILE LOOP#####
-        target_choice = random_choice(attribute_indexes)
-        relative_choice = random_choice(attribute_indexes)
-
-        target_matrix = transform(scene, attribute_indexes[target_choice])
-        relative_matrix = transform(scene, attribute_indexes[relative_choice])
-
-        middle(target_matrix, relative_matrix)
-
-        middle_tuple = generate_middle_expr(scene, list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[1])
+            if from_absolute is not None:
+                absolute_tuple = generate_absolute_expr(scene, from_absolute, target_key, choices[1])
+                found = True
 
     if choices[2] == "left to" or choices[2] == "right to" or choices[2] == "top to" or choices[2] == "bottom to" or choices[2] == "top-left to" or choices[2] == "top-right to" or choices[2] == "bottom-left to" or choices[2] == "bottom-right to":
         ####RICKY FIX HERE - USE WHILE LOOP#####
-        target_choice = random_choice(attribute_indexes)
-        relative_choice = random_choice(attribute_indexes)
 
-        target_matrix = transform(scene, attribute_indexes[target_choice])
-        relative_matrix = transform(scene, attribute_indexes[relative_choice])
+        valid_keys_pair = permute_pair(attribute_indexes)
 
-        relative_output = relative(target_matrix, relative_matrix, choices[2])
+        found = False
+        while(len(valid_keys_pair) > 0 and not found):
+            keys_pair = random.choices(valid_keys_pair)[0]
+            valid_keys_pair.remove(keys_pair)
 
-        relative_tuple = generate_relative_expr(scene, list(target_matrix), list(relative_matrix), target_choice, relative_choice, choices[2])
+            target_choice = keys_pair[0]
+            relative_choice = keys_pair[1]
 
+            target_matrix = transform(scene, attribute_indexes[target_choice])
+            relative_matrix = transform(scene, attribute_indexes[relative_choice])
 
-    return [from_relative_tuple, absolute_tuple, middle_tuple, relative_tuple]
+            relative_output = relative(target_matrix, relative_matrix, choices[2])
+
+            if len(relative_output) > 0:
+                relative_tuple = generate_relative_expr(scene, list(relative_output), target_choice, relative_choice, choices[2])
+                found = True
+    else:
+        valid_keys_pair = permute_pair(attribute_indexes)
+
+        found = False
+        while(len(valid_keys_pair) > 0 and not found):
+
+            keys_pair = random.choices(valid_keys_pair)[0]
+            valid_keys_pair.remove(keys_pair)
+            target_choice = keys_pair[0]
+            relative_choice = keys_pair[1]
+
+            target_matrix = transform(scene, attribute_indexes[target_choice])
+            relative_matrix = transform(scene, attribute_indexes[relative_choice])
+
+            middleset = middle(target_matrix, relative_matrix)
+            
+
+            if len(middleset) > 0:
+                middle_tuple = generate_relative_expr(scene, list(middleset),  target_choice, relative_choice, choices[2])
+                found = True        
+
+    return [from_relative_tuple, absolute_tuple, relative_tuple]
 
 #creates  an expression involving "xth from the..." relative position
 def generate_from_relative_expr(scene, from_relative_output, target_choice, expression_connector, index):
@@ -184,7 +239,7 @@ def generate_absolute_expr(scene, absolute_output, key_choice, expression_connec
     expression = ""
 
     for obj in scene.objects_tuples:
-        if obj[4][0] == absolute_output[0][0] and obj[4][1] == absolute_output[0][1]:
+        if obj[4][0] == absolute_output[0] and obj[4][1] == absolute_output[1]:
             index_list.append(obj[0])
     
     expression += expression_connector + " " + key_choice + " object"
@@ -212,41 +267,35 @@ def generate_absolute_expr(scene, absolute_output, key_choice, expression_connec
     return tuple(expression_tuple)
 
 #creates an expression involving objects in the middle of the image
-def generate_middle_expr(scene, target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
+# def generate_middle_expr(scene, target_output, target_choice, relative_choice, expression_connector):
     
-    expression_tuple = list()
-    index_list = list()
-    expression = ""
+#     expression_tuple = list()
+#     index_list = list()
+#     expression = ""
 
-    for obj in scene.objects_tuples:
-        if obj[4][0] == target_matrix[0][0] and obj[4][1] == target_matrix[0][1]:
-            index_list.append(obj[0])
+#     for obj in scene.objects_tuples:
+#         if obj[4] in target_output:
+#             index_list.append(obj[0])
 
-    for obj in scene.objects_tuples:
-        if obj[4][0] == relative_matrix[0][0] and obj[4][1] == relative_matrix[0][1]:
-            index_list.append(obj[0])
 
-    expression += expression_connector + " " + target_choice + " object"
+#     expression += expression_connector + " " + target_choice + " object"
 
-    expression_tuple.append(expression)
-    expression_tuple.append('mid template')
-    expression_tuple.append(tuple(index_list))
+#     expression_tuple.append(expression)
+#     expression_tuple.append('mid template')
+#     expression_tuple.append(tuple(index_list))
 
-    return tuple(expression_tuple)
+#     return tuple(expression_tuple)
 
 #creates an expression involving relative position
-def generate_relative_expr(scene, target_matrix, relative_matrix, target_choice, relative_choice, expression_connector):
+def generate_relative_expr(scene, target_output,  target_choice, relative_choice, expression_connector):
     expression_tuple = list()
     index_list = list()
     expression = ""
 
     for obj in scene.objects_tuples:
-        if obj[4][0] == target_matrix[0][0] and obj[4][1] == target_matrix[0][1]:
+        if obj[4] in target_output:
             index_list.append(obj[0])
 
-    for obj in scene.objects_tuples:
-        if obj[4][0] == relative_matrix[0][0] and obj[4][1] == relative_matrix[0][1]:
-            index_list.append(obj[0])
     
     expression += target_choice + " object " + expression_connector + " " + relative_choice + " object"
 
@@ -285,11 +334,14 @@ def generate_relative_expr(scene, target_matrix, relative_matrix, target_choice,
         expression_tuple.append('bottom-left to template')
         expression_tuple.append(tuple(index_list))
     
-    else:
+    elif expression_connector == "bottom-right to":
         expression_tuple.append(expression)
         expression_tuple.append('bottom-right to template')
         expression_tuple.append(tuple(index_list))
-
+    else:
+        expression_tuple.append(expression)
+        expression_tuple.append('middle of template')
+        expression_tuple.append(tuple(index_list))
     return tuple(expression_tuple)
 
 
@@ -598,7 +650,50 @@ def generate_expressions(attribute_indexes):
     return shapedict
 
 
-def main():
+def controller(scene_list):
+    for scene_ob in list_scenes:
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+
+def main_test_script():
 
     #for testing
     list_scenes = list() #comment this line out if not testing
@@ -608,9 +703,16 @@ def main():
     object_1.normalized_location = (0,0)
     object_2 = objects("small", "green", "sphere", (2,0,0))
     object_2.normalized_location = (2,0)
+    object_3 = objects("big", "red", "box", (0,1,0))
+    object_3.normalized_location = (0,1)
+    object_4 = objects("small", "green", "sphere", (2,1,0))
+    object_4.normalized_location = (2,1)
     list_object = []
     list_object.append(object_1)
     list_object.append(object_2)
+    list_object.append(object_3)
+    list_object.append(object_4)
+
 
     scene_1 = Scene("", list_object)
 
@@ -677,4 +779,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_test_script()
