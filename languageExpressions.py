@@ -43,7 +43,6 @@ def transform(scene, list_indexes):
     return new_set
 
 #chooses a random object to impose a language expression on
-####RICKY FIX HERE#####
 def random_choice(attribute_indexes):
     print(attribute_indexes)
     local_keys = list(attribute_indexes.keys())
@@ -703,15 +702,15 @@ def main_test_script():
     object_1.normalized_location = (0,0)
     object_2 = objects("small", "green", "sphere", (2,0,0))
     object_2.normalized_location = (2,0)
-    object_3 = objects("big", "red", "box", (0,1,0))
-    object_3.normalized_location = (0,1)
-    object_4 = objects("small", "green", "sphere", (2,1,0))
-    object_4.normalized_location = (2,1)
+    #object_3 = objects("big", "red", "box", (0,1,0))
+    #object_3.normalized_location = (0,1)
+    #object_4 = objects("small", "green", "sphere", (2,1,0))
+    #object_4.normalized_location = (2,1)
     list_object = []
     list_object.append(object_1)
     list_object.append(object_2)
-    list_object.append(object_3)
-    list_object.append(object_4)
+    #list_object.append(object_3)
+    #list_object.append(object_4)
 
 
     scene_1 = Scene("", list_object)
