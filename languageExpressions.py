@@ -105,14 +105,13 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
     relative_tuple = ()
     
     #hard coded
-    choices[2] = "left to"
-    choices[1] = "leftmost"
-    choices[0] = "from left"
+    choices[2] = "middle of"
+    choices[1] = "bottommost"
+    choices[0] = "from right"
 
     #run functions that generate the matrix positions of the output for all types of positional expressions: relative, absolute, and middle
 
     if choices[0] == "from left" or choices[0] == "from right":
-        ####RICKY FIX HERE - USE WHILE LOOP#####
 
         valid_keys = valid_attribute_key_filter(attribute_indexes)
 
@@ -137,7 +136,6 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
                 found = True
        
     if choices[1] == "rightmost" or choices[1] == "leftmost" or choices[1] == "topmost" or choices[1] == "bottommost":
-        ####RICKY FIX HERE - USE WHILE LOOP#####
         valid_keys = valid_attribute_key_filter(attribute_indexes)
 
         found = False
@@ -154,7 +152,6 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
                 found = True
 
     if choices[2] == "left to" or choices[2] == "right to" or choices[2] == "top to" or choices[2] == "bottom to" or choices[2] == "top-left to" or choices[2] == "top-right to" or choices[2] == "bottom-left to" or choices[2] == "bottom-right to":
-        ####RICKY FIX HERE - USE WHILE LOOP#####
 
         valid_keys_pair = permute_pair(attribute_indexes)
 
@@ -189,10 +186,10 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
             relative_matrix = transform(scene, attribute_indexes[relative_choice])
 
             middleset = middle(target_matrix, relative_matrix)
-            
 
             if len(middleset) > 0:
-                middle_tuple = generate_relative_expr(scene, list(middleset),  target_choice, relative_choice, choices[2])
+                relative_tuple = generate_relative_expr(scene, list(middleset),  target_choice, relative_choice, choices[2])
+                print(relative_tuple)
                 found = True        
 
     return [from_relative_tuple, absolute_tuple, relative_tuple]
@@ -385,7 +382,7 @@ def middle(targetMatrix, relativeMatrix):
         horizontalcheck = ((x_coord-1,y_coord) in relativeMatrix and (x_coord+1,y_coord) in relativeMatrix)
         verticalcheck = ((x_coord,y_coord-1) in relativeMatrix and (x_coord,y_coord+1) in relativeMatrix)
         if horizontalcheck or verticalcheck:
-            outputset.add(x_coord,y_coord)
+            outputset.add((x_coord,y_coord))
     return outputset
 
 #sets the absolute position according to the iamge matrix
@@ -692,7 +689,7 @@ def controller(scene_list):
 
 
 
-def main_test_script():
+def main_test_script_1():
 
     #for testing
     list_scenes = list() #comment this line out if not testing
@@ -776,6 +773,389 @@ def main_test_script():
         print(full_expression_list)
 
 
+def main_test_script_2():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("big", "red", "box", (2,0,0))
+    object_1.normalized_location = (2,0)
+    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2.normalized_location = (0,0)
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+
+    scene_1 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
+
+def main_test_script_3():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("big", "red", "box", (0,2,0))
+    object_1.normalized_location = (0,2)
+    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2.normalized_location = (0,0)
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+
+    scene_1 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
+
+def main_test_script_4():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("big", "red", "box", (1,2,0))
+    object_1.normalized_location = (1,2)
+    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2.normalized_location = (0,0)
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+
+    scene_1 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
+
+def main_test_script_5():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("big", "red", "box", (2,0,0))
+    object_1.normalized_location = (2,0)
+    object_2 = objects("small", "green", "sphere", (1,2,0))
+    object_2.normalized_location = (1,2)
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+
+    scene_1 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
+
+def main_test_script_6():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("big", "red", "box", (2,1,0))
+    object_1.normalized_location = (2,1)
+    object_2 = objects("small", "green", "sphere", (1,1,0))
+    object_2.normalized_location = (1,1)
+    object_3 = objects("small", "red", "sphere", (0, 1, 0))
+    object_3.normalized_location = (0,1)
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+    list_object.append(object_3)
+
+    scene_1 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
+
 
 if __name__ == "__main__":
-    main_test_script()
+    main_test_script_6()
