@@ -94,6 +94,7 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
     choices.append(random.choice(list1))
     choices.append(random.choice(list2))
     choices.append(random.choice(list3))
+    print(choices)
     key_choice = ""
     from_relative_output = ""
     from_absolute_output = ""
@@ -105,9 +106,9 @@ def generate_location_expr(scene, shapedict, templatedict, attribute_indexes):
     relative_tuple = ()
     
     #hard coded
-    choices[2] = "middle of"
-    choices[1] = "bottommost"
-    choices[0] = "from right"
+    #choices[2] = "middle of"
+    #choices[1] = "rightmost"
+    #choices[0] = "from right"
 
     #run functions that generate the matrix positions of the output for all types of positional expressions: relative, absolute, and middle
 
@@ -417,6 +418,8 @@ def absolute(targetMatrix, absoluteDirection):
 
 #finds the target object and returns it in an output set
 def from_relative(targetMatrix, relativeDirection, number):
+
+    print(targetMatrix)
     grid_length = 3
     outputset = set()
 
@@ -439,6 +442,7 @@ def from_relative(targetMatrix, relativeDirection, number):
     for i in iter_range:
         number -= len(targetcolumns[i])
         if number == 0 and len(targetcolumns[i]) == 1:
+            print(number, targetcolumns[i])
             targetObject = targetcolumns[i][0]
             break
         elif number < 0:
@@ -1156,6 +1160,99 @@ def main_test_script_6():
         print("FULL EXPRESSION LIST: ")
         print(full_expression_list)
 
+def main_test_script_8():
+
+    #for testing
+    list_scenes = list() #comment this line out if not testing
+    
+
+    object_1 = objects("small", "red", "box", (1,1,0))
+    object_1.normalized_location = (1,1)
+    object_2 = objects("small", "green", "sphere", (1,2,0))
+    object_2.normalized_location = (1,2)
+
+    list_object = []
+    list_object.append(object_1)
+    list_object.append(object_2)
+
+    scene_1 = Scene("", list_object)
+
+    object_3 = objects("big", "red", "sphere", (0,0,0))
+    object_3.normalized_location = (0,0)
+    object_4 = objects("small", "green", "sphere", (0,-2,0))
+    object_4.normalized_location = (0,-2)
+    object_5 = objects("small", "red", "box", (2,0,0))
+    object_5.normalized_location = (2,0)
+
+    list_object = []
+    list_object.append(object_3)
+    list_object.append(object_4)
+    list_object.append(object_5)
+
+    #scene_2 = Scene("", list_object)
+
+    list_scenes.append(scene_1)
+    #list_scenes.append(scene_2)
+    
+
+
+    for scene_ob in list_scenes:
+
+        attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
+            "red" : [],
+            "green" : [],
+            "small" : [],
+            "big" : [],
+            "sphere" : [],
+            "box" : []
+        }
+
+        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+            #(index, color, shape, size)
+
+
+            info = [index, item.color, item.shape, item.size, item.normalized_location]
+
+            scene_ob.objects_tuples.append(info)
+
+            if item.color == "red":
+                attribute_indexes["red"].append(index)
+            if item.color == "green":
+                attribute_indexes["green"].append(index)
+            if item.size == "small":
+                attribute_indexes["small"].append(index)
+            if item.size == "big":
+                attribute_indexes["big"].append(index)
+            if item.shape == "sphere":
+                attribute_indexes["sphere"].append(index)
+            if item.shape == "box":
+                attribute_indexes["box"].append(index)
+        
+        #collect the data
+        shapedict = generate_expressions(attribute_indexes)
+        templatedict = generate_templates(shapedict)
+        expressionlist = generate_tuples(shapedict, templatedict)
+        
+        location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
+        full_expression_list = expressionlist + location_expressions
+
+        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+
+
+        print("SHAPEDICT: ")
+        print(shapedict)
+        print()
+        print("TEMPLATE DICT: ")
+        print(templatedict)
+        print()
+        print("EXPRESSION LIST: ")
+        print(expressionlist)
+        print()
+        print("LOCATION EXPRESSIONS: ")
+        print(location_expressions)
+        print()
+        print("FULL EXPRESSION LIST: ")
+        print(full_expression_list)
 
 if __name__ == "__main__":
-    main_test_script_6()
+    main_test_script_8()
