@@ -31,16 +31,3 @@ Output file name = generated.json
 Original images file: /img/
 
 Segmentation mask images file: /segmentation_mask_images/
-
-
-
-
-To use the classes:
-
-```python
-from data import *
-
-print(Object)
-print(Scene)
-print(list_scenes)
-```
