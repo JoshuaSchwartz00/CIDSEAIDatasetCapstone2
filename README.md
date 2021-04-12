@@ -1,11 +1,15 @@
 # CIDSEAIDatasetCapstone2
 
 This file describes how to run the VRE dataset creation script.
+
 Arizona State University Senior Capstone Project
+
 Team Name: CIDSE Large-Scale Dataset Creation for Artificial Intelligence (AI) Research
+
 Team Members: Autumn Martin, Branden Roper, Jack Summers, Joshua Schwartz, Ricky Hsu, Wei Chen
 
 Script file name = main.py
+
 
 ## Prerequisites
 
