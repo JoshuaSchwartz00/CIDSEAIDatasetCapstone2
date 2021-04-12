@@ -1,4 +1,5 @@
 import json
+import os
 
 def createjson(folder_name, sceneList, json_file_path):
     output_list = list()
@@ -17,3 +18,11 @@ def createjson(folder_name, sceneList, json_file_path):
     with open(json_file_path) as f:
         f.write(json_string)
         f.close()
+
+if __name__ == "__main__":
+    folder = "generated.json"
+    #sceneList?
+    path = os.getcwd()
+
+    createjson(folder, sceneList, path)
+
