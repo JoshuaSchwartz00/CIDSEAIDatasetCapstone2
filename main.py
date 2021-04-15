@@ -10,6 +10,6 @@ if __name__ == "__main__":
 
     language_controller(scene_list)
     #results folder for segemented images
-    #segment_images("segmented_img", scene_list)
-    #createjsonfile("segmented_img", scene_list, "output.json")
+    segment_images("segmented_img", scene_list)
+    createjsonfile("segmented_img", scene_list, "output.json")
 

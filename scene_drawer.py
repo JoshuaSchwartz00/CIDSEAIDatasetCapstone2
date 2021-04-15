@@ -8,7 +8,7 @@ import os
 
 
 class SceneDrawer:
-    screenshot_bounding_box = (8, 110, 506, 608)
+    screenshot_bounding_box = (8, 79, 508, 579)
     screenshot_wait_time = 0.15
     screenshot_folder = "img"
     screenshot_filename = "scene"
