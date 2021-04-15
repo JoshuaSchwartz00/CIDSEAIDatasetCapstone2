@@ -12,7 +12,7 @@ class SceneDrawer:
     screenshot_wait_time = 0.15
     screenshot_folder = "img"
     screenshot_filename = "scene"
-    images_to_generate = 500
+    images_to_generate = 10
     min_models_per_scene = 2
     max_models_per_scene = 4
     canvas_width = 500
@@ -104,7 +104,7 @@ class SceneDrawer:
 
 
 def main():
-    SceneDrawer.orchestrate()
+    return SceneDrawer.orchestrate()
 
 
 if __name__ == "__main__":

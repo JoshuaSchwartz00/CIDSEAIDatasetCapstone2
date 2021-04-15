@@ -1,6 +1,8 @@
 import cv2
 import imutils
 import numpy as np
+from data import Model
+from data import Scene
 
 #RGB bounds for all colors needed to make the segmentation masks
 LOWER_RED = (np.array([0,120,70]), np.array([10,255,255]))
@@ -41,7 +43,7 @@ def remove_contours_closest(contours, ob):
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
 
-        dist = abs(ob.location[0] - cX) + abs(ob.location[1] - cY)
+        dist = abs(ob.pixel_location[0] - cX) + abs(ob.pixel_location[1] - cY)
         if dist < nearest:
             best_index = i
             nearest = dist
@@ -97,14 +99,35 @@ def segment_images(output_folder, sceneList):
         image_local = sc.image_location
         ob_bank = sc.list_objects
         for idy, expression in enumerate(sc.list_expressions):
-            #TODO
+            
             ref_expr, template, obs = expression
-            result_img = segment(image_local, obs)
+            obList = list()
+            for i in obs:
+                obList.append(sc.list_objects[i])
+            result_img = segment(image_local, obList)
             cv2.imwrite("{}/{}_{}.jpg".format(output_folder, idx, idy), result_img)
 
             
             
+def main():
+    list_objects = list()
+    a = Model("big", "red", "sphere", 0.0)
+    a.pixel_location = (250,232)
+    list_objects.append(a)
+    a = Model("small", "red", "cube", 0.0)
+    a.pixel_location = (390,232)
+    list_objects.append(a)
+    a = Model("small", "green", "sphere", 0.0)
+    a.pixel_location = (250,378)
+    list_objects.append(a)
+    sc = Scene("object2.jpg", list_objects)
+    sc.list_expressions = [(0,0,[0,2]),(0,0,[1])]
+    list_scene = list()
+    list_scene.append(sc)
+    segment_images("temp", list_scene)
+
 
 
 if __name__ == "__main__":
+    main()
     exit(1)

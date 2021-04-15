@@ -1,10 +1,8 @@
 #import re
 #import exrex
-import main
 import random
-from main import list_scenes
-from main import objects
-from main import Scene
+from data import Model
+from data import Scene
 
 
 # class object: 
@@ -459,7 +457,13 @@ def generate_tuples(shapedict, templatedict):
 
     tuple_list = []
 
+    print("shapedict")
+    print(shapedict)
+    print("templatedict")
+    print(templatedict)
+
     for key in shapedict:
+        
         tuple_list.append((key,templatedict[key], tuple(shapedict[key])))
 
     return tuple_list
@@ -472,7 +476,7 @@ def generate_templates(shapedict):
     #"<col> object template"
     if "red objects" in shapedict:
         templatedict["red objects"] = "<col> object template"
-    if shapedict["green objects"]:
+    if "green objects" in shapedict:
         templatedict["green objects"] = "<col> object template"
 
     #"<size> object template"
@@ -537,6 +541,8 @@ def generate_templates(shapedict):
     if "small green spheres" in shapedict:
         templatedict["small green spheres"] = "<size> <color> <shape> template"
 
+    #print(templatedict)
+
     return templatedict
     
 
@@ -544,6 +550,11 @@ def generate_templates(shapedict):
 def generate_expressions(attribute_indexes):
     
     shapedict = {}
+
+    # current_keys = list(attribute_indexes.keys())
+    # for key in current_keys:
+    #     if len(attribute_indexes[key]) == 0:
+    #         del attribute_indexes[key]
     
     #have to add template dictionary
     #object template
@@ -646,12 +657,14 @@ def generate_expressions(attribute_indexes):
     if "small" in attribute_indexes and "green" in attribute_indexes and "sphere" in attribute_indexes:
         if list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"])):
             shapedict["small green spheres"] = list(set(attribute_indexes["small"]) & set(attribute_indexes["green"]) & set(attribute_indexes["sphere"]))
-         
+    #print(shapedict)
+
     return shapedict
 
 
-def controller(scene_list):
-    for scene_ob in list_scenes:
+def language_controller(scene_list):
+    for scene_ob in scene_list:
+        print(scene_ob.image_location)
         attribute_indexes = { #when an object has one of these attributes, add its index to the list for that attribute
             "red" : [],
             "green" : [],
@@ -660,7 +673,7 @@ def controller(scene_list):
             "sphere" : [],
             "box" : []
         }
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -690,7 +703,7 @@ def controller(scene_list):
         full_expression_list = expressionlist + location_expressions
 
         scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
-
+    print("finished lang expression")
 
 
 def main_test_script_1():
@@ -699,9 +712,9 @@ def main_test_script_1():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (0,0,0))
+    object_1 = Model("big", "red", "box", (0,0,0))
     object_1.normalized_location = (0,0)
-    object_2 = objects("small", "green", "sphere", (2,0,0))
+    object_2 = Model("small", "green", "sphere", (2,0,0))
     object_2.normalized_location = (2,0)
     #object_3 = objects("big", "red", "box", (0,1,0))
     #object_3.normalized_location = (0,1)
@@ -729,7 +742,7 @@ def main_test_script_1():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -783,9 +796,9 @@ def main_test_script_2():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (2,0,0))
+    object_1 = Model("big", "red", "box", (2,0,0))
     object_1.normalized_location = (2,0)
-    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2 = Model("small", "green", "sphere", (0,0,0))
     object_2.normalized_location = (0,0)
     list_object = []
     list_object.append(object_1)
@@ -806,7 +819,7 @@ def main_test_script_2():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -859,9 +872,9 @@ def main_test_script_3():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (0,2,0))
+    object_1 = Model("big", "red", "box", (0,2,0))
     object_1.normalized_location = (0,2)
-    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2 = Model("small", "green", "sphere", (0,0,0))
     object_2.normalized_location = (0,0)
     list_object = []
     list_object.append(object_1)
@@ -882,7 +895,7 @@ def main_test_script_3():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -935,9 +948,9 @@ def main_test_script_4():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (1,2,0))
+    object_1 = Model("big", "red", "box", (1,2,0))
     object_1.normalized_location = (1,2)
-    object_2 = objects("small", "green", "sphere", (0,0,0))
+    object_2 = Model("small", "green", "sphere", (0,0,0))
     object_2.normalized_location = (0,0)
     list_object = []
     list_object.append(object_1)
@@ -958,7 +971,7 @@ def main_test_script_4():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -1011,9 +1024,9 @@ def main_test_script_5():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (2,0,0))
+    object_1 = Model("big", "red", "box", (2,0,0))
     object_1.normalized_location = (2,0)
-    object_2 = objects("small", "green", "sphere", (1,2,0))
+    object_2 = Model("small", "green", "sphere", (1,2,0))
     object_2.normalized_location = (1,2)
     list_object = []
     list_object.append(object_1)
@@ -1034,7 +1047,7 @@ def main_test_script_5():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -1087,11 +1100,11 @@ def main_test_script_6():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("big", "red", "box", (2,1,0))
+    object_1 = Model("big", "red", "box", (2,1,0))
     object_1.normalized_location = (2,1)
-    object_2 = objects("small", "green", "sphere", (1,1,0))
+    object_2 = Model("small", "green", "sphere", (1,1,0))
     object_2.normalized_location = (1,1)
-    object_3 = objects("small", "red", "sphere", (0, 1, 0))
+    object_3 = Model("small", "red", "sphere", (0, 1, 0))
     object_3.normalized_location = (0,1)
     list_object = []
     list_object.append(object_1)
@@ -1113,7 +1126,7 @@ def main_test_script_6():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 
@@ -1166,9 +1179,9 @@ def main_test_script_8():
     list_scenes = list() #comment this line out if not testing
     
 
-    object_1 = objects("small", "red", "box", (1,1,0))
+    object_1 = Model("small", "red", "box", (1,1,0))
     object_1.normalized_location = (1,1)
-    object_2 = objects("small", "green", "sphere", (1,2,0))
+    object_2 = Model("small", "green", "sphere", (1,2,0))
     object_2.normalized_location = (1,2)
 
     list_object = []
@@ -1177,11 +1190,11 @@ def main_test_script_8():
 
     scene_1 = Scene("", list_object)
 
-    object_3 = objects("big", "red", "sphere", (0,0,0))
+    object_3 = Model("big", "red", "sphere", (0,0,0))
     object_3.normalized_location = (0,0)
-    object_4 = objects("small", "green", "sphere", (0,-2,0))
+    object_4 = Model("small", "green", "sphere", (0,-2,0))
     object_4.normalized_location = (0,-2)
-    object_5 = objects("small", "red", "box", (2,0,0))
+    object_5 = Model("small", "red", "box", (2,0,0))
     object_5.normalized_location = (2,0)
 
     list_object = []
@@ -1207,7 +1220,7 @@ def main_test_script_8():
             "box" : []
         }
 
-        for index, item in enumerate(scene_ob.list_objects): #make tuple/list for each object like: (1, red, box, small) 
+        for index, item in enumerate(scene_ob.model_list): #make tuple/list for each object like: (1, red, box, small) 
             #(index, color, shape, size)
 
 

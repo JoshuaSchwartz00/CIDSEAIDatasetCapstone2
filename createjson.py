@@ -1,7 +1,7 @@
 import json
 import os
 
-def createjson(folder_name, sceneList, json_file_path):
+def createjsonfile(folder_name, sceneList, json_file_path):
     output_list = list()
     for idx, sc in enumerate(sceneList):
 
@@ -10,7 +10,7 @@ def createjson(folder_name, sceneList, json_file_path):
             local_dict = dict()
             local_dict["expression"] = ref_expr
             local_dict["template"] = template
-            local_dict["output_image"] = "{}/{}_{}.jpg".format(output_folder, idx, idy)
+            local_dict["output_image"] = "{}/{}_{}.jpg".format(folder_name, idx, idy)
             local_dict["original_image"] = sc.image_location
             output_list.append(local_dict)
 
