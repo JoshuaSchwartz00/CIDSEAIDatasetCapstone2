@@ -14,8 +14,8 @@ def createjsonfile(folder_name, sceneList, json_file_path):
             local_dict["original_image"] = sc.image_location
             output_list.append(local_dict)
 
-    json_string = json.dumps(output_list)
-    with open(json_file_path) as f:
+    json_string = json.dumps(output_list, indent=4)
+    with open(json_file_path, "w") as f:
         f.write(json_string)
         f.close()
 
@@ -24,5 +24,5 @@ if __name__ == "__main__":
     #sceneList?
     path = os.getcwd()
 
-    createjson(folder, sceneList, path)
+    
 
