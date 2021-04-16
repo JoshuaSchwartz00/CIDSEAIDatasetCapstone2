@@ -1,6 +1,6 @@
 from vpython import box, color, sphere, vector
 from data import Model
-import random
+import itertools
 
 
 class ModelDrawer:
@@ -66,15 +66,22 @@ class ModelDrawer:
         return vector(*self.model.vpython_location)
 
     @staticmethod
-    def generate_random_model():
-        random_model = Model()
-        random_model.size = random.choice(list(ModelDrawer.size_map.keys()))
-        random_model.color = random.choice(list(ModelDrawer.color_map.keys()))
-        random_model.shape = random.choice(list(ModelDrawer.vpython_function_map.keys()))
-        random_model.vpython_location = (random.randint(-1, 1) * 2, random.randint(-1, 1) * 2, 0)
-        random_model.derive_normalized_location()
-        random_model.derive_pixel_location()
-        return random_model
+    def generate_permutations():
+        sizes = ModelDrawer.size_map.keys()
+        colors = ModelDrawer.color_map.keys()
+        shapes = ModelDrawer.vpython_function_map.keys()
+        return list(itertools.product(sizes, colors, shapes))
+
+    @staticmethod
+    def model_tuples_to_models(model_tuples):
+        models = []
+        for model_tuple in model_tuples:
+            model = Model()
+            model.size = model_tuple[0]
+            model.color = model_tuple[1]
+            model.shape = model_tuple[2]
+            models.append(model)
+        return models
 
 
 # we are assigning a static variable that uses other static variables of the class

@@ -1,9 +1,4 @@
 class Model:
-    # maps vpython location to pixel location
-    pixel_map = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
-                 (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
-                 (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
-
     # objects can be: small or big, red or green, box or sphere
     def __init__(self):
         self.size = None
@@ -18,14 +13,6 @@ class Model:
         for item in vars(self):
             my_str += "{} = {}, ".format(item, getattr(self, item))
         return my_str[0:my_str.rindex(",")]
-
-    def derive_normalized_location(self):
-        normalized_x = (self.vpython_location[0] + 2) // 2
-        normalized_y = (-1 * self.vpython_location[1] + 2) // 2
-        self.normalized_location = (normalized_x, normalized_y)
-
-    def derive_pixel_location(self):
-        self.pixel_location = self.pixel_map[self.vpython_location]
 
 
 class Scene:

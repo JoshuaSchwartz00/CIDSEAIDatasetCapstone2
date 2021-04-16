@@ -4,7 +4,7 @@ from segment import segment_images
 from createjson import createjsonfile
 if __name__ == "__main__":
     #img folder for image generation
-    scene_list = SceneDrawer.orchestrate()
+    scene_list = SceneDrawer.load_pickle()
     for sc in scene_list:
         print(sc)
 
