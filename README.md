@@ -34,4 +34,4 @@ Output file name = generated.json
 
 Original images file: /img/
 
-Segmentation mask images file: /segmentation_mask_images/
+Segmentation mask images file: /segmented_img/
