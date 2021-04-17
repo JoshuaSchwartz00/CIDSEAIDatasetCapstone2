@@ -1,6 +1,7 @@
 from model_drawer import ModelDrawer
 from vpython import canvas, scene, vector
 from data import Scene, Model
+from shutil import move
 import itertools
 import random
 import pickle
@@ -128,7 +129,7 @@ class SceneDrawer:
         image_name = SceneDrawer.filename_from_path(my_scene.image_location)
         downloads_image_path = SceneDrawer.downloads_template.format(image_name)
         cwd_image_path = SceneDrawer.cwd_template.format(my_scene.image_location)
-        os.rename(downloads_image_path, cwd_image_path)
+        move(downloads_image_path, cwd_image_path)
 
     @staticmethod
     def filename_from_path(path):
@@ -169,6 +170,7 @@ def generate_image(*, color, shape, size, location, filename, folder):
     scene_drawer = SceneDrawer(my_scene)  # make scene drawer and draw
     scene_drawer.draw_and_capture(fixed=True)
     time.sleep(1)  # wait before moving
+
     SceneDrawer.move_image(my_scene)
 
 
