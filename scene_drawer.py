@@ -15,7 +15,7 @@ class SceneDrawer:
 
     downloads_template = os.path.join(os.getenv("USERPROFILE"), "Downloads") + "\\{}"
     cwd_template = os.getcwd() + "\\{}"
-    download_wait_seconds = 1
+    download_wait_seconds = 5
 
     image_folder = "img"
     image_filename = "scene"
@@ -83,17 +83,37 @@ class SceneDrawer:
         return SceneDrawer.pixel_map[vpython_location]
 
     @staticmethod
-    def orchestrate():
-        SceneDrawer.ensure_directory_exists(SceneDrawer.image_folder)
-        scene_list = SceneDrawer.generate_scenes()
+    def orchestrate_pickle():
+        SceneDrawer.generate_pickle()
+
+    @staticmethod
+    def orchestrate_images():
+        scene_list = SceneDrawer.load_pickle()
+        SceneDrawer.generate_images(scene_list)
+        time.sleep(SceneDrawer.download_wait_seconds)
         SceneDrawer.move_images(scene_list)
+
+    @staticmethod
+    def generate_pickle():
+        scene_list = SceneDrawer.generate_scenes()
         SceneDrawer.ensure_directory_exists(SceneDrawer.pickle_folder)
         SceneDrawer.save_pickle(scene_list)
 
     @staticmethod
-    def ensure_directory_exists(directory):
-        if not os.path.isdir(directory):
-            os.mkdir(directory)
+    def generate_images(scene_list):
+        for my_scene in scene_list:
+            scene_drawer = SceneDrawer(my_scene)
+            scene_drawer.draw_and_capture()
+
+    @staticmethod
+    def generate_scenes():
+        scene.delete()  # delete built-in vpython canvas; we will make our own for each scene
+        scenes = SceneDrawer.generate_permutations()
+        for index, my_scene in enumerate(scenes):
+            scene_drawer = SceneDrawer(my_scene)
+            scene_drawer.assign_image_location(index)
+            scene_drawer.assign_positions()
+        return scenes
 
     @staticmethod
     def generate_permutations():
@@ -105,17 +125,6 @@ class SceneDrawer:
                 my_scene = Scene()
                 my_scene.model_list = ModelDrawer.model_tuples_to_models(model_tuples)
                 scenes.append(my_scene)
-        return scenes
-
-    @staticmethod
-    def generate_scenes():
-        scene.delete()  # delete built-in vpython canvas; we will make our own for each scene
-        scenes = SceneDrawer.generate_permutations()
-        for index, my_scene in enumerate(scenes):
-            scene_drawer = SceneDrawer(my_scene)
-            scene_drawer.assign_image_location(index)
-            scene_drawer.assign_positions()
-            scene_drawer.draw_and_capture()
         return scenes
 
     @staticmethod
@@ -132,13 +141,13 @@ class SceneDrawer:
         move(downloads_image_path, cwd_image_path)
 
     @staticmethod
-    def filename_from_path(path):
-        return path[path.index("\\") + 1:]
+    def ensure_directory_exists(directory):
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
 
     @staticmethod
-    def build_pickle_file():
-        scenes = SceneDrawer.generate_permutations()
-        SceneDrawer.save_pickle(scenes)
+    def filename_from_path(path):
+        return path[path.index("\\") + 1:]
 
     @staticmethod
     def save_pickle(scenes):
@@ -180,14 +189,7 @@ def generate_image(*, color, shape, size, location, filename, folder):
 
 
 def main():
-    SceneDrawer.orchestrate()
-
-
-def main_pickle_only():
-    SceneDrawer.build_pickle_file()
-    scene_list = SceneDrawer.load_pickle()
-    for my_scene in scene_list:
-        print(my_scene)
+    SceneDrawer.orchestrate_images()
 
 
 if __name__ == "__main__":
