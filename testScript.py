@@ -2,53 +2,179 @@ import os
 import time
 import json
 import glob
+from segment import segment_images
+import random
+from data import Model, Scene
 
-## image generation tests
+
+pixel_map = {(0, 0): (110, 86), (0, 1): (250, 86), (0, 2): (390, 86),
+                (1, 0): (110, 232), (1, 1): (250, 232), (1, 2): (390, 232),
+                (2, 0): (110, 378), (2, 1): (250, 378), (2, 2): (390, 378)}
 
 #image generation script generates 4000+ images
 def test1() -> bool:
-    image_path_files = glob.glob(os.getcwd() + "\\img\\*.jpg")
+    # image_path_files = glob.glob(os.getcwd() + "\\img\\*.jpg")
 
-    image_count = len(image_path_files)
+    # image_count = len(image_path_files)
 
-    return image_count > 4000
+    # return image_count > 4000
 
-#Image generation script generates images with the desired properties/configurations. 
+#makes a segmentation mask
 def test2() -> bool:
-    pass
+    list_objects = list()
+    a = Model()
+    a.color = "red"
+    a.pixel_location = (250,378)
+    list_objects.append(a)
+    # a = Model()
+    # a.color = "green"
+    # a.pixel_location = (250,232)
+    # list_objects.append(a)
+    # a = Model()
+    # a.color = "green"
+    # a.pixel_location = (390,378)
+    # list_objects.append(a)
+    # a = Model()
+    # a.color = "red"
+    # a.pixel_location = (390,86)
+    # list_objects.append(a)
+    sc = Scene()
+    sc.image_location = "scene2.jpg"
+    sc.model_list = list_objects
+    sc.list_expressions = [("objects","template",[0])]
+    list_scene = list()
+    list_scene.append(sc)
+    segment_images("temp", list_scene)
 
 
-## language expression tests
-
-#Language expression generation script generates all possible language expressions for all 4000 generated image scenes. 
+#generate image correctly
+#VISUAL INSPECTION
 def test3() -> bool:
-    pass
+    color_list = ["red", "green"]
+    shape_list = ["cube", "sphere"]
+    size_list = ["big", "small"]
+    location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
 
-#Language expression generation script generates valid expressions for all properties in all generated images. 
-#(hard to test automatically)
+    list_ob = []
+
+    path = os.getcwd()
+
+    if(not os.path.exists(os.getcwd() + "\\temp")):
+        os.mkdir(os.getcwd() + "\\temp")
+
+    if(not os.path.exists(os.getcwd() + "\\temp_result")):
+        os.mkdir(os.getcwd() + "\\temp_result")
+
+    for i in range(10):
+        color_choice = random.choice(color_list)
+        shape_choice = random.choice(shape_list)
+        size_choice = random.choice(size_list)
+        loc_choice = random.choice(location_list)
+
+        generate_image_func(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+
+        list_objects = list()
+        a = Model()
+        a.color = color_choice
+        a.size = size_choice
+        a.shape = shape_choice
+        a.pixel_location = pixel_map[loc_choice]
+        list_objects.append(a)
+        # a = Model()
+        # a.color = "green"
+        # a.pixel_location = (250,232)
+        # list_objects.append(a)
+        # a = Model()
+        # a.color = "green"
+        # a.pixel_location = (390,378)
+        # list_objects.append(a)
+        # a = Model()
+        # a.color = "red"
+        # a.pixel_location = (390,86)
+        # list_objects.append(a)
+        sc = Scene()
+        sc.image_location = f"scene{i}.png"
+        sc.model_list = list_objects
+        sc.list_expressions = [("objects","template",[0])]
+        list_scene = list()
+        list_scene.append(sc)
+        segment_images("temp", list_scene)
+        segment_images("temp_result", list_scene)
+
+    #VISUALLY INSPECT THIS SHIT
+    
+
+#another visual inspection???
 def test4() -> bool:
-    pass
+    color_list = ["red", "green"]
+    shape_list = ["cube", "sphere"]
+    size_list = ["big", "small"]
+    location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
 
+    list_ob = []
 
-## segmentation masking tests
+    path = os.getcwd()
 
-#checks if segmentation mask covers appropriate objects
-#(basically impossible to test automatically)
+    if(not os.path.exists(os.getcwd() + "\\temp")):
+        os.mkdir(os.getcwd() + "\\temp")
+
+    if(not os.path.exists(os.getcwd() + "\\temp_result")):
+        os.mkdir(os.getcwd() + "\\temp_result")
+
+    for i in range(10):
+        color_choice = random.choice(color_list)
+        shape_choice = random.choice(shape_list)
+        size_choice = random.choice(size_list)
+        loc_choice = random.choice(location_list)
+
+        generate_image_func(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+
+        list_objects = list()
+        a = Model()
+        a.color = color_choice
+        a.size = size_choice
+        a.shape = shape_choice
+        a.pixel_location = pixel_map[loc_choice]
+        list_objects.append(a)
+        # a = Model()
+        # a.color = "green"
+        # a.pixel_location = (250,232)
+        # list_objects.append(a)
+        # a = Model()
+        # a.color = "green"
+        # a.pixel_location = (390,378)
+        # list_objects.append(a)
+        # a = Model()
+        # a.color = "red"
+        # a.pixel_location = (390,86)
+        # list_objects.append(a)
+        sc = Scene()
+        sc.image_location = f"scene{i}.png"
+        sc.model_list = list_objects
+        sc.list_expressions = [("objects","template",[0])]
+        list_scene = list()
+        list_scene.append(sc)
+        segment_images("temp", list_scene)
+        segment_images("temp_result", list_scene)
+
+    #VISUALLY INSPECT THIS SHIT
+
+#
 def test5() -> bool:
     pass
     
 
 #checks if the number of segmentation mask images equals the number of language expressions
-#checks if the number of segmentation mask images equals the number of images
 def test6() -> bool:
+    output = json.load("output.json")
 
-    image_path_files = glob.glob(os.getcwd() + "\\img\\*.jpg")
-    segmentation_path_files = glob.glob(os.getcwd() + "\\_____\\*.jpg") #seg mask image file
+    num_output = len(output)
 
-    image_count = len(image_path_files)
+    segmentation_path_files = glob.glob(os.getcwd() + "\\segmented_img\\*.jpg") #seg mask image file
+
     seg_count = len(segmentation_path_files)
 
-    return image_count == seg_count
+    return num_output == seg_count
 
 
 if __name__ == "__main__":
