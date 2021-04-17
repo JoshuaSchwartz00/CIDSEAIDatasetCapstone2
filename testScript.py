@@ -65,13 +65,15 @@ def test3() -> bool:
     if(not os.path.exists(os.getcwd() + "\\temp_result")):
         os.mkdir(os.getcwd() + "\\temp_result")
 
+    list_scene = []
+
     for i in range(10):
         color_choice = random.choice(color_list)
         shape_choice = random.choice(shape_list)
         size_choice = random.choice(size_list)
         loc_choice = random.choice(location_list)
 
-        generate_image_func(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+        generate_image(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
 
         list_objects = list()
         a = Model()
@@ -96,10 +98,9 @@ def test3() -> bool:
         sc.image_location = f"scene{i}.png"
         sc.model_list = list_objects
         sc.list_expressions = [("objects","template",[0])]
-        list_scene = list()
         list_scene.append(sc)
-        segment_images("temp", list_scene)
-        segment_images("temp_result", list_scene)
+
+    segment_images("temp_result", list_scene)
 
     #VISUALLY INSPECT THIS SHIT
     
@@ -111,8 +112,6 @@ def test4() -> bool:
     size_list = ["big", "small"]
     location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
 
-    list_ob = []
-
     path = os.getcwd()
 
     if(not os.path.exists(os.getcwd() + "\\temp")):
@@ -121,13 +120,15 @@ def test4() -> bool:
     if(not os.path.exists(os.getcwd() + "\\temp_result")):
         os.mkdir(os.getcwd() + "\\temp_result")
 
+    list_scene = []
+
     for i in range(10):
         color_choice = random.choice(color_list)
         shape_choice = random.choice(shape_list)
         size_choice = random.choice(size_list)
         loc_choice = random.choice(location_list)
 
-        generate_image_func(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+        generate_image(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
 
         list_objects = list()
         a = Model()
@@ -151,11 +152,10 @@ def test4() -> bool:
         sc = Scene()
         sc.image_location = f"scene{i}.png"
         sc.model_list = list_objects
-        sc.list_expressions = [("objects","template",[0])]
-        list_scene = list()
+        sc.list_expressions = [[("objects","template",[])]]
         list_scene.append(sc)
-        segment_images("temp", list_scene)
-        segment_images("temp_result", list_scene)
+        
+    segment_images("temp_result", list_scene)
 
     #VISUALLY INSPECT THIS SHIT
 
