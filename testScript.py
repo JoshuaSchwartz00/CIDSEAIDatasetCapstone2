@@ -5,14 +5,16 @@ import glob
 from segment import segment_images
 import random
 from data import Model, Scene
+from scene_drawer import generate_image
 
 
 pixel_map = {(0, 0): (110, 86), (0, 1): (250, 86), (0, 2): (390, 86),
-                (1, 0): (110, 232), (1, 1): (250, 232), (1, 2): (390, 232),
-                (2, 0): (110, 378), (2, 1): (250, 378), (2, 2): (390, 378)}
+            (1, 0): (110, 232), (1, 1): (250, 232), (1, 2): (390, 232),
+            (2, 0): (110, 378), (2, 1): (250, 378), (2, 2): (390, 378)}
 
 #image generation script generates 4000+ images
 def test1() -> bool:
+    pass
     # image_path_files = glob.glob(os.getcwd() + "\\img\\*.jpg")
 
     # image_count = len(image_path_files)
@@ -51,7 +53,7 @@ def test2() -> bool:
 #VISUAL INSPECTION
 def test3() -> bool:
     color_list = ["red", "green"]
-    shape_list = ["cube", "sphere"]
+    shape_list = ["box", "sphere"]
     size_list = ["big", "small"]
     location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
 
@@ -72,8 +74,10 @@ def test3() -> bool:
         shape_choice = random.choice(shape_list)
         size_choice = random.choice(size_list)
         loc_choice = random.choice(location_list)
+        filename = f"scene{i}"
+        folder = "temp"
 
-        generate_image(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+        generate_image(color=color_choice, shape=shape_choice, size=size_choice, location=loc_choice, filename=filename, folder=folder)
 
         list_objects = list()
         a = Model()
@@ -128,7 +132,10 @@ def test4() -> bool:
         size_choice = random.choice(size_list)
         loc_choice = random.choice(location_list)
 
-        generate_image(color_choice, shape_choice, size_choice, loc_choice, path, "temp", f"scene{i}")
+        filename = f"scene{i}"
+        folder = "temp"
+
+        generate_image(color=color_choice, shape=shape_choice, size=size_choice, location=loc_choice, filename=filename, folder=folder)
 
         list_objects = list()
         a = Model()
