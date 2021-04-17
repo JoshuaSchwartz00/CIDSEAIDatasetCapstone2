@@ -9,7 +9,7 @@ import os
 
 
 class SceneDrawer:
-    models_per_scene = range(2, 3)
+    models_per_scene = range(2, 5)
     pickle_length = 10
 
     downloads_template = os.path.join(os.getenv("USERPROFILE"), "Downloads") + "\\{}"
@@ -153,7 +153,7 @@ class SceneDrawer:
         my_canvas.camera.pos = vector(0, 0, 6.21472)
 
 
-def generate_image(color, shape, size, location, filename, folder):
+def generate_image(*, color, shape, size, location, filename, folder):
     SceneDrawer.ensure_directory_exists(folder)  # check directory
 
     model = Model()  # make model
@@ -174,9 +174,6 @@ def generate_image(color, shape, size, location, filename, folder):
 
 def main():
     SceneDrawer.orchestrate()
-    scene_list = SceneDrawer.load_pickle()
-    for my_scene in scene_list:
-        print(my_scene)
 
 
 if __name__ == "__main__":
