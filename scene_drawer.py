@@ -1,6 +1,6 @@
 from model_drawer import ModelDrawer
-from vpython import canvas, scene
-from data import Scene
+from vpython import canvas, scene, vector
+from data import Scene, Model
 import itertools
 import random
 import pickle
@@ -9,10 +9,11 @@ import os
 
 
 class SceneDrawer:
-    models_per_scene = range(2, 5)
+    models_per_scene = range(2, 3)
+    pickle_length = 10
 
-    downloads_template = os.path.join(os.getenv("USERPROFILE"), "Downloads") + "\\{image_name}"
-    cwd_template = os.getcwd() + "\\{image_location}"
+    downloads_template = os.path.join(os.getenv("USERPROFILE"), "Downloads") + "\\{}"
+    cwd_template = os.getcwd() + "\\{}"
     download_wait_seconds = 1
 
     image_folder = "img"
@@ -39,12 +40,21 @@ class SceneDrawer:
     def __str__(self):
         return str(self.scene)
 
-    def draw(self):
-        image_name = SceneDrawer.filename_from_path(self.scene.image_location)
+    def draw_and_capture(self, fixed=False):
         my_canvas = canvas(width=SceneDrawer.vpython_canvas_width, height=SceneDrawer.vpython_canvas_height)
+        if fixed:
+            self.fix_camera(my_canvas)
+        self.draw()
+        self.capture(my_canvas)
+        my_canvas.delete()
+
+    def draw(self):
         for model in self.scene.model_list:
             model_drawer = ModelDrawer(model)
             model_drawer.draw()
+
+    def capture(self, my_canvas):
+        image_name = SceneDrawer.filename_from_path(self.scene.image_location)
         my_canvas.waitfor(SceneDrawer.vpython_redraw_flag)
         my_canvas.waitfor(SceneDrawer.vpython_draw_complete_flag)
         my_canvas.capture(image_name)
@@ -77,7 +87,7 @@ class SceneDrawer:
         scene_list = SceneDrawer.generate_scenes()
         SceneDrawer.move_images(scene_list)
         SceneDrawer.ensure_directory_exists(SceneDrawer.pickle_folder)
-        SceneDrawer.save_pickle(scene_list)
+        SceneDrawer.save_pickle(scene_list, len(scene_list))
 
     @staticmethod
     def ensure_directory_exists(directory):
@@ -104,7 +114,7 @@ class SceneDrawer:
             scene_drawer = SceneDrawer(my_scene)
             scene_drawer.assign_image_location(index)
             scene_drawer.assign_positions()
-            scene_drawer.draw()
+            scene_drawer.draw_and_capture()
         return scenes
 
     @staticmethod
@@ -115,10 +125,9 @@ class SceneDrawer:
 
     @staticmethod
     def move_image(my_scene):
-        image_location = my_scene.image_location
-        image_name = SceneDrawer.filename_from_path(image_location)
-        downloads_image_path = SceneDrawer.downloads_template.format(image_name=image_name)
-        cwd_image_path = SceneDrawer.cwd_template.format(image_location=image_location)
+        image_name = SceneDrawer.filename_from_path(my_scene.image_location)
+        downloads_image_path = SceneDrawer.downloads_template.format(image_name)
+        cwd_image_path = SceneDrawer.cwd_template.format(my_scene.image_location)
         os.rename(downloads_image_path, cwd_image_path)
 
     @staticmethod
@@ -126,16 +135,41 @@ class SceneDrawer:
         return path[path.index("\\") + 1:]
 
     @staticmethod
-    def save_pickle(scene_list):
+    def save_pickle(scene_list, length):
         filename = SceneDrawer.pickle_path_format.format(SceneDrawer.pickle_folder, SceneDrawer.pickle_filename)
         with open(filename, "wb") as pickle_file:
-            pickle.dump(scene_list, pickle_file)
+            pickle.dump(scene_list[0:length], pickle_file)
 
     @staticmethod
     def load_pickle():
         filename = SceneDrawer.pickle_path_format.format(SceneDrawer.pickle_folder, SceneDrawer.pickle_filename)
         with open(filename, "rb") as pickle_file:
             return pickle.load(pickle_file)
+
+    @staticmethod
+    def fix_camera(my_canvas):
+        my_canvas.up = vector(0, 1, 0)
+        my_canvas.camera.axis = vector(0, 0, -6.21472)
+        my_canvas.camera.pos = vector(0, 0, 6.21472)
+
+
+def generate_image(color, shape, size, location, filename, folder):
+    SceneDrawer.ensure_directory_exists(folder)  # check directory
+
+    model = Model()  # make model
+    model.color = color
+    model.shape = shape
+    model.size = size
+    model.vpython_location = location
+
+    my_scene = Scene()  # make scene
+    my_scene.image_location = "{}\\{}.png".format(folder, filename)
+    my_scene.model_list = [model]
+
+    scene_drawer = SceneDrawer(my_scene)  # make scene drawer and draw
+    scene_drawer.draw_and_capture(fixed=True)
+    time.sleep(1)  # wait before moving
+    SceneDrawer.move_image(my_scene)
 
 
 def main():
