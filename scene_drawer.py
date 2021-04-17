@@ -153,7 +153,7 @@ class SceneDrawer:
         my_canvas.camera.pos = vector(0, 0, 6.21472)
 
 
-def generate_image(color, shape, size, location, filename, folder):
+def generate_image(*, color, shape, size, location, filename, folder):
     SceneDrawer.ensure_directory_exists(folder)  # check directory
 
     model = Model()  # make model
