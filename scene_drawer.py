@@ -88,7 +88,7 @@ class SceneDrawer:
         scene_list = SceneDrawer.generate_scenes()
         SceneDrawer.move_images(scene_list)
         SceneDrawer.ensure_directory_exists(SceneDrawer.pickle_folder)
-        SceneDrawer.save_pickle(scene_list, len(scene_list))
+        SceneDrawer.save_pickle(scene_list)
 
     @staticmethod
     def ensure_directory_exists(directory):
@@ -136,10 +136,15 @@ class SceneDrawer:
         return path[path.index("\\") + 1:]
 
     @staticmethod
-    def save_pickle(scene_list, length):
+    def build_pickle_file():
+        scenes = SceneDrawer.generate_permutations()
+        SceneDrawer.save_pickle(scenes)
+
+    @staticmethod
+    def save_pickle(scenes):
         filename = SceneDrawer.pickle_path_format.format(SceneDrawer.pickle_folder, SceneDrawer.pickle_filename)
         with open(filename, "wb") as pickle_file:
-            pickle.dump(scene_list[0:length], pickle_file)
+            pickle.dump(scenes, pickle_file)
 
     @staticmethod
     def load_pickle():
@@ -176,6 +181,13 @@ def generate_image(*, color, shape, size, location, filename, folder):
 
 def main():
     SceneDrawer.orchestrate()
+
+
+def main_pickle_only():
+    SceneDrawer.build_pickle_file()
+    scene_list = SceneDrawer.load_pickle()
+    for my_scene in scene_list:
+        print(my_scene)
 
 
 if __name__ == "__main__":
