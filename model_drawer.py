@@ -20,7 +20,9 @@ class ModelDrawer:
     def draw(self):
         vpython_function = self.derive_vpython_function()
         vpython_kwargs = self.derive_vpython_kwargs()
-        vpython_function(**vpython_kwargs)
+        vpython_model = vpython_function(**vpython_kwargs)
+        if self.model.vpython_location == (0, 0, 0):
+            vpython_model.rotate(angle=-5, axis=vector(1, 0, 1))
 
     # match the name of the shape with the vpython function that draws it
     # example: "box" -> box

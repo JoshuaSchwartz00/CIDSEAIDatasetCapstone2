@@ -701,8 +701,12 @@ def language_controller(scene_list):
         
         location_expressions = generate_location_expr(scene_ob, shapedict, templatedict, attribute_indexes)
         full_expression_list = expressionlist + location_expressions
+        filtered_expressions = list()
+        for expression in full_expression_list:
+            if len(expression) >= 3 and len(expression[2]) > 0:
+                filtered_expressions.append(expression)
 
-        scene_ob.list_expressions = full_expression_list #set the attribute in the scene object
+        scene_ob.list_expressions = filtered_expressions #set the attribute in the scene object
     print("finished lang expression")
 
 

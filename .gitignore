@@ -2,3 +2,16 @@
 img/
 segmented_img/
 output.json
+.idea/CIDSEAIDatasetCapstone2.iml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+__pycache__/createjson.cpython-38.pyc
+__pycache__/createjson.cpython-38.pyc
+__pycache__/data.cpython-38.pyc
+__pycache__/languageExpressions.cpython-38.pyc
+__pycache__/model_drawer.cpython-38.pyc
+__pycache__/scene_drawer.cpython-38.pyc
+__pycache__/segment.cpython-38.pyc

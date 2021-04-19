@@ -136,8 +136,8 @@ def main():
     
     list_objects = list()
     a = Model()
-    a.color = "red"
-    a.pixel_location = (250,378)
+    a.color = "green"
+    a.pixel_location = (390,378)
     list_objects.append(a)
     # a = Model()
     # a.color = "green"
@@ -152,7 +152,7 @@ def main():
     # a.pixel_location = (390,86)
     # list_objects.append(a)
     sc = Scene()
-    sc.image_location = "img/scene2.jpg"
+    sc.image_location = "segmented_img/0_3.jpg"
     sc.model_list = list_objects
     sc.list_expressions = [("objects","template",[0])]
     list_scene = list()
