@@ -10,6 +10,8 @@ Team Members: Autumn Martin, Branden Roper, Jack Summers, Joshua Schwartz, Ricky
 
 Script file name = main.py
 
+## Link to Download the Datasets
+https://drive.google.com/drive/folders/1tFIbPGYHN8JA3a2kxQCk-xQ-1zo80_PZ?usp=sharing
 
 ## Prerequisites
 
