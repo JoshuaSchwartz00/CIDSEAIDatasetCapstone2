@@ -8,9 +8,9 @@ from data import Model, Scene
 from scene_drawer import generate_image
 
 
-pixel_map = {(0, 0): (110, 86), (0, 1): (250, 86), (0, 2): (390, 86),
-            (1, 0): (110, 232), (1, 1): (250, 232), (1, 2): (390, 232),
-            (2, 0): (110, 378), (2, 1): (250, 378), (2, 2): (390, 378)}
+pixel_map = {(-2, 2, 0): (110, 86), (0, 2, 0): (250, 86), (2, 2, 0): (390, 86),
+                (-2, 0, 0): (110, 232), (0, 0, 0): (250, 232), (2, 0, 0): (390, 232),
+                (-2, -2, 0): (110, 378), (0, -2, 0): (250, 378), (2, -2, 0): (390, 378)}
 
 #image generation script generates 4000+ images
 def test1() -> bool:
@@ -24,10 +24,7 @@ def test1() -> bool:
 #makes a segmentation mask
 def test2() -> bool:
     list_objects = list()
-    a = Model()
-    a.color = "red"
-    a.pixel_location = (250,378)
-    list_objects.append(a)
+    
     # a = Model()
     # a.color = "green"
     # a.pixel_location = (250,232)
@@ -40,13 +37,29 @@ def test2() -> bool:
     # a.color = "red"
     # a.pixel_location = (390,86)
     # list_objects.append(a)
+    color_choice = "red"
+    shape_choice = "sphere"
+    size_choice = "big"
+    loc_choice = (-2, -2, 0)
+    filename = "scene0"
+    folder = "temp"
+
+    a = Model()
+    a.color = "red"
+    a.size = size_choice
+    a.shape = shape_choice
+    a.pixel_location = pixel_map[(-2,-2, 0)]
+    list_objects.append(a)
+    
+    generate_image(color=color_choice, shape=shape_choice, size=size_choice, location=loc_choice, filename=filename, folder=folder)
+
     sc = Scene()
-    sc.image_location = "scene2.jpg"
+    sc.image_location = "temp/scene0.png"
     sc.model_list = list_objects
     sc.list_expressions = [("objects","template",[0])]
     list_scene = list()
     list_scene.append(sc)
-    segment_images("temp", list_scene)
+    segment_images("temp_result", list_scene)
 
 
 #generate image correctly
@@ -55,7 +68,7 @@ def test3() -> bool:
     color_list = ["red", "green"]
     shape_list = ["box", "sphere"]
     size_list = ["big", "small"]
-    location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+    location_list = [(-2, -2, 0), (-2, 0, 0), (-2, 2, 0), (0, -2, 0), (0, 0, 0), (0, 2, 0), (2, -2, 0), (2, 0, 0), (2, 2, 0)]
 
     list_ob = []
 
@@ -99,7 +112,7 @@ def test3() -> bool:
         # a.pixel_location = (390,86)
         # list_objects.append(a)
         sc = Scene()
-        sc.image_location = f"scene{i}.png"
+        sc.image_location = f"{folder}\\scene{i}.png"
         sc.model_list = list_objects
         sc.list_expressions = [("objects","template",[0])]
         list_scene.append(sc)
@@ -112,9 +125,11 @@ def test3() -> bool:
 #another visual inspection???
 def test4() -> bool:
     color_list = ["red", "green"]
-    shape_list = ["cube", "sphere"]
+    shape_list = ["box", "sphere"]
     size_list = ["big", "small"]
-    location_list = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+    location_list = [(-2, -2, 0), (-2, 0, 0), (-2, 2, 0), (0, -2, 0), (0, 0, 0), (0, 2, 0), (2, -2, 0), (2, 0, 0), (2, 2, 0)]
+
+    list_ob = []
 
     path = os.getcwd()
 
@@ -131,7 +146,6 @@ def test4() -> bool:
         shape_choice = random.choice(shape_list)
         size_choice = random.choice(size_list)
         loc_choice = random.choice(location_list)
-
         filename = f"scene{i}"
         folder = "temp"
 
@@ -157,12 +171,14 @@ def test4() -> bool:
         # a.pixel_location = (390,86)
         # list_objects.append(a)
         sc = Scene()
-        sc.image_location = f"scene{i}.png"
+        sc.image_location = f"{folder}\\scene{i}.png"
         sc.model_list = list_objects
-        sc.list_expressions = [[("objects","template",[])]]
+        sc.list_expressions = [("objects","template",[])]
         list_scene.append(sc)
-        
+
     segment_images("temp_result", list_scene)
+
+    #VISUALLY INSPECT THIS SHIT
 
     #VISUALLY INSPECT THIS SHIT
 
@@ -187,7 +203,8 @@ def test6() -> bool:
 if __name__ == "__main__":
     #command = "python main.py"
     #os.system(command)
-    
+    test4()
+    exit(0)
     #runs all the tests
     if(test1()):
         print("Test 1 passed.")
