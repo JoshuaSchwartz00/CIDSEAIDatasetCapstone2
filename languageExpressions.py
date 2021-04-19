@@ -1268,4 +1268,4 @@ def main_test_script_8():
         print(full_expression_list)
 
 if __name__ == "__main__":
-    main_test_script_8()
+    main_test_script_1()
